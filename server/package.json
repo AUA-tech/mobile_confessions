@@ -1,6 +1,14 @@
 {
-  "name": "server",
+  "name": "aua-confessions-server",
   "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT"
+  "description": "",
+  "author": "AUA Tech Community <AUATechCommunity@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.54.0",
+    "moment": "^2.18.1",
+    "pg": "^6.2.3",
+    "pg-hstore": "^2.3.2",
+    "uuid": "^3.0.1"
+  }
 }
