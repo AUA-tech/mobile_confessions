@@ -1,0 +1,39 @@
+service: mobile_confessions
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  profile: ${file(./env.yml):PROFILE}
+  region: ${file(./env.yml):REGION}
+  stage: ${file(./env.yml):STAGE}
+  timeout: 10
+  
+functions:
+
+  get_confession:
+    handler: func/confessions.get_confession
+    events:
+      - http:
+          path: confessions/get_confession
+          method: post
+
+  process_conf:
+    handler: func/confessions.process_conf
+    events:
+      - http:
+          path: confessions/process_conf
+          method: post
+    
+  send_confession:
+    handler: func/confessions.send_confession
+    events:
+      - http:
+          path: confessions/send_confession
+          method: post
+
+  send_feedback:
+    handler: func/confessions.send_feedback
+    events:
+      - http:
+          path: confessions/send_feedback
+          method: post
