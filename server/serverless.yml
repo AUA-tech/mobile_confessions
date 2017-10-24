@@ -1,4 +1,4 @@
-service: mobile_confessions
+service: mobile-confessions
 
 provider:
   name: aws
