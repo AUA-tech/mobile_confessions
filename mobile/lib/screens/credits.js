@@ -1,19 +1,15 @@
 import React, { PureComponent } from 'react';
-import {
-  StyleSheet,
-  Image,
-  Button
-} from 'react-native';
 
 import Header from '../components/header';
+import TabIcon from '../components/tabicon';
 
 export default class CreditsScreen extends PureComponent {
   static navigationOptions = {
     tabBarLabel: 'Credits',
     tabBarIcon: ({ tintColor }) => (
-      <Image
+      <TabIcon
         source={require('../assets/info-icon.png')}
-        style={[styles.icon, {tintColor: tintColor}]}
+        tintColor={tintColor}
       />
     ),
   };
@@ -24,10 +20,3 @@ export default class CreditsScreen extends PureComponent {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  icon: {
-    width: 26,
-    height: 26,
-  },
-});
