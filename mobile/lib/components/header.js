@@ -7,10 +7,12 @@ import {
   View
 } from 'react-native';
 
-const Header = ({ title, navigation }) => (
-  <CenteredView style={{backgroundColor: "#3A4F60"}}>
+import colors from '../constants/colors';
+
+const Header = ({ title }) => (
+  <CenteredView>
     <StatusBar
-      backgroundColor="#3A4F60"
+      backgroundColor={colors.primaryColor}
       barStyle="light-content"
     />
     <HeaderText>{title.toUpperCase()}</HeaderText>
@@ -20,6 +22,7 @@ const Header = ({ title, navigation }) => (
 const CenteredView = styled.View`
   align-items: center;
   justify-content: center;
+  background-color: ${colors.primaryColor}
   height: 65;
 `
 

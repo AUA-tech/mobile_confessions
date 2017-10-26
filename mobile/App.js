@@ -1,6 +1,7 @@
 import React from 'react';
 import { TabNavigator } from 'react-navigation';
 
+import colors from './lib/constants/colors';
 import ConfessionsFeedScreen from './lib/screens/feed';
 import NewConfessionScreen from './lib/screens/confession';
 import CreditsScreen from './lib/screens/credits';
@@ -21,7 +22,7 @@ const options = {
   tabBarPosition: 'bottom',
   animationEnabled: true,
   tabBarOptions: {
-    activeTintColor: '#3A4F60',
+    activeTintColor: colors.primaryColor,
   },
 }
 
