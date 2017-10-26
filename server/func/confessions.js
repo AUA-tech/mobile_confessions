@@ -41,3 +41,7 @@ module.exports.send_feedback = (event, context, callback) => {
     const data = JSON.parse(event.body);
     const {some_thing} = data;
 };
+function post_confession (confession) {
+    // TODO: Need to implement FB sdk so that 
+    // we are able to post confessions in the group
+}
