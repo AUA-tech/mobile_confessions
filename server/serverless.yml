@@ -6,8 +6,9 @@ provider:
   profile: ${file(./env.yml):PROFILE}
   region: ${file(./env.yml):REGION}
   stage: ${file(./env.yml):STAGE}
-  timeout: 10
-  
+  memorySize: 128
+  timeout: 5
+
 functions:
 
   get_confession:
