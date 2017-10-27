@@ -10,13 +10,23 @@ provider:
   timeout: 5
 
 functions:
-
+  
   get_confession:
     handler: func/confessions.get_confession
     events:
       - http:
           path: confessions/get_confession
           method: post
+
+  get_access_token:
+    handler: func/confessions.get_access_token
+    environment:
+      FB_APP_ID: ${file(./env.yml):FB_APP_ID}
+      FB_APP_SECRET: ${file(./env.yml):FB_APP_SECRET}
+    events:
+      - http:
+          path: confessions/get_access_token
+          method: get
 
   process_conf:
     handler: func/confessions.process_conf
