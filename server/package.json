@@ -6,6 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "aws-sdk": "^2.54.0",
+    "fb": "^2.0.0",
     "moment": "^2.18.1",
     "pg": "^6.2.3",
     "pg-hstore": "^2.3.2",
