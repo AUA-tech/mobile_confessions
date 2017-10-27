@@ -2,7 +2,7 @@ const AWS = require('aws-sdk');
 const moment = require('moment');
 const uuid = require('uuid');
 const FB = require('fb');
-//const SES = new AWS.SES();
+const SES = new AWS.SES();
 
 module.exports.get_confession = (event, context, callback) => {
     const data = JSON.parse(event.body);
@@ -18,15 +18,18 @@ module.exports.send_confession = (event, context, callback) => {
     if(data) {
         const {confession} = data;
         console.log(confession);
-        const response = {
-            statusCode: 200,
-            body: JSON.stringify({
-                message: 'Sent to fb group',
-                confession
-                // input: event
-            })
-        };
-        context.succeed(response);
+        sendSomeEmail({confession})
+        .then(() => {
+            const response = {
+                statusCode: 200,
+                body: JSON.stringify({
+                    message: 'Sent to fb group',
+                    confession
+                    // input: event
+                })
+            };
+            context.succeed(response);
+        })
     } else {
         const response = {
             statusCode: 200,
@@ -82,3 +85,48 @@ function post_confession (confession) {
     // TODO: Need to implement FB sdk so that 
     // we are able to post confessions in the group
 }
+
+
+function sendSomeEmail(params) {
+    var emailParams = {
+      Destination: {
+        ToAddresses: [
+            process.env.ADMIN_EMAIL
+        ]
+      },
+      Message: {
+        Subject: {
+          Data: `New message for AUA Admin`,
+          Charset: 'UTF-8'
+        },
+        Body: {
+          Html: {
+            Data: `
+            <!DOCTYPE html>
+            <html>
+              <head>
+                <meta name="viewport" content="width=device-width">
+                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+                <title>Simple Transactional Email</title>
+                <style type="text/css">
+                </style>
+              </head>
+              <body>
+                Hi man!
+                <br />
+                ${params.confession}
+              </body>
+            </html>
+  `,
+            Charset: 'UTF-8'
+          }
+        }
+      },
+      Source: process.env.SUPPORT_EMAIL,
+      ReplyToAddresses: [
+          process.env.SUPPORT_EMAIL
+      ]
+    };
+  
+    return SES.sendEmail(emailParams).promise();
+  }
