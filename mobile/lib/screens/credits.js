@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 
 import Header from '../components/header';
-import TabIcon from '../components/tabicon';
+import TabIcon from '../components/tabIcon';
 
 export default class CreditsScreen extends PureComponent {
   static navigationOptions = {
