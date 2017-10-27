@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { ScrollView, Text } from 'react-native';
+import { FlatList, Text } from 'react-native';
 import { GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 
 import Header from '../components/header';
@@ -38,9 +38,9 @@ export default class ConfessionsFeedScreen extends PureComponent {
     }
   }
 
-  createConfessionCards = () => this.state.confessionsList.map(confession => (
-    <ConfessionCard key={confession.id} {...confession} />
-  ))
+  createConfessionCards = ({ item: confession }) => (
+    <ConfessionCard {...confession} />
+  );
 
   componentWillMount() {
     const infoRequest = new GraphRequest(
@@ -60,11 +60,16 @@ export default class ConfessionsFeedScreen extends PureComponent {
   }
 
   render() {
+    const { confessionsList } = this.state;
     return [
       <Header key='header' title="Feed" />,
-      <ScrollView key='scrollView' style={{backgroundColor: colors.bgColor}}>
-        { this.createConfessionCards() }
-      </ScrollView>
+      <FlatList
+        key='scrollView'
+        data={confessionsList}
+        style={{backgroundColor: colors.bgColor}}
+        renderItem={ this.createConfessionCards }
+        keyExtractor={item => item.id}
+      />
     ];
   }
 }
