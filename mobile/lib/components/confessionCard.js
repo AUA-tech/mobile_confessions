@@ -11,8 +11,10 @@ const ConfessionCard = ({ message, created_time }) => {
   const clearedMessage = confessionNumberMatch ? message.split(confessionNumber)[1]  : message; // We also need to clear the message if the match is not null
   return (
     <CardView>
-      <NumberText>{confessionNumber}</NumberText>
-      <Text>{moment(created_time).format('MMMM Do YYYY, HH:MM')}</Text>
+      <RowView>
+        <NumberText>{confessionNumber}</NumberText>
+        <DateText>{moment(created_time).format('MMMM Do YYYY, HH:MM')}</DateText>
+      </RowView>
       <Text>{clearedMessage}</Text>
     </CardView>
   );
@@ -22,6 +24,17 @@ const NumberText = styled.Text`
   color: ${colors.headerColor};
   font-weight: 700;
   font-size: 20;
+`
+
+const DateText = styled.Text`
+  color: ${colors.softTextColor};
+  font-weight: 300;
+  font-size: 16;
+`
+
+const RowView = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
 `
 
 const CardView = styled.View`
