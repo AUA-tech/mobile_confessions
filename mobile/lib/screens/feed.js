@@ -49,7 +49,7 @@ export default class ConfessionsFeedScreen extends PureComponent {
         accessToken: accessToken,
         parameters: {
           fields: {
-            string: 'id,message,link,created_time',
+            string: 'id,message,link,created_time,attachments,picture,full_picture',
           }
         }
       },

@@ -1,11 +1,18 @@
 import React, { PureComponent } from 'react';
 import styled from 'styled-components/native';
-import { Text, View } from 'react-native';
+import { Text, View, Image } from 'react-native';
 import moment from 'moment';
 
 import colors from '../constants/colors';
 
-const ConfessionCard = ({ message, created_time }) => {
+const ConfessionCard = ({
+  link,
+  message,
+  picture,
+  full_picture,
+  attachments,
+  created_time
+}) => {
   const confessionNumberMatch = message.match(/#([0-9]+)\d/); // Match a regexp for extracting confession number
   const confessionNumber = confessionNumberMatch ? confessionNumberMatch[0] : ''; // Match data is an array so we validate and take the first item if valid
   const clearedMessage = confessionNumberMatch ? message.split(confessionNumber)[1]  : message; // We also need to clear the message if the match is not null
@@ -16,6 +23,12 @@ const ConfessionCard = ({ message, created_time }) => {
         <DateText>{moment(created_time).format('MMMM Do YYYY, HH:MM')}</DateText>
       </RowView>
       <Text>{clearedMessage}</Text>
+      { !full_picture ? null :
+        <Image
+          style={{width: '100%', height: 250}}
+          source={{uri: full_picture}}
+        />
+      }
     </CardView>
   );
 }
