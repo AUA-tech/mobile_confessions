@@ -30,7 +30,7 @@ export default class NewConfessionScreen extends PureComponent {
 
   render() {
     return (
-      <Layout headerTitle='Confess'>
+      <Layout headerTitle='Credits'>
         <StyledTextInput
           multiline = {true}
           numberOfLines = {4}
