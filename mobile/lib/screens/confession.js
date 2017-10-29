@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 import styled from 'styled-components/native';
-import { TextInput, Button } from 'react-native';
 
 import Layout from '../components/layout';
 import TabIcon from '../components/tabIcon';
+import Button from '../components/button';
 import colors from '../constants/colors';
 
 export default class NewConfessionScreen extends PureComponent {
@@ -20,11 +20,11 @@ export default class NewConfessionScreen extends PureComponent {
   constructor() {
     super();
     this.state = {
-      feedback: '',
+      confession: '',
     }
   }
 
-  onTextChange = feedback => this.setState({ feedback });
+  onTextChange = confession => this.setState({ confession });
 
   render() {
     return (
@@ -33,34 +33,30 @@ export default class NewConfessionScreen extends PureComponent {
           multiline = {true}
           numberOfLines = {4}
           onChangeText={this.onTextChange}
-          value={this.state.feedback}
+          value={this.state.confession}
           placeholder={'Confess yourself here'}
           placeholderTextColor={colors.placeholderColor}
         />
-        <AttachmentText
-          multiline = {true}
-          numberOfLines = {4}
-          placeholder={'Confess yourself here'}
-          placeholderTextColor={colors.placeholderColor}
-        />
-        <AttachedFilesBox />
+        <AttachmentContainer>
+          <AttachmentText
+            multiline = {true}
+            numberOfLines = {4}
+            placeholder={'Confess yourself here'}
+            placeholderTextColor={colors.placeholderColor}
+          />
+          <AttachedFilesBox />
+        </AttachmentContainer>
         <Button
           onPress={() => { console.log('Pressed') }}
           title='Submit'
-          color='green'
-          accessibilityLabel='Learn more about this purple button'
         />
       </Layout>
     );
   }
 }
 
-const Container = styled.View`
-  height: 90%;
-  background-color: ${colors.bgColor};
-`
-
 const StyledTextInput = styled.TextInput`
+  flex: 1;
   height: 50%;
   width: 100%;
   background-color: white;
@@ -70,8 +66,12 @@ const StyledTextInput = styled.TextInput`
   margin-bottom: 8%;
 `
 
+const AttachmentContainer = styled.View`
+  flex: 1;
+`
+
 const AttachmentText = styled.TextInput`
-  height: 10%;
+  height: 33%;
   width: 100%;
   background-color: white;
   padding: 20px;
@@ -79,5 +79,5 @@ const AttachmentText = styled.TextInput`
 `
 
 const AttachedFilesBox = styled.View`
-  height: 25%;
+  height: 66%;
 `
