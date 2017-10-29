@@ -12,6 +12,7 @@ const Layout = ({ headerTitle, children }) =>  [
 ];
 
 const Container = styled.View`
+  flex: 1;
   height: 90%;
   background-color: ${colors.bgColor};
 `

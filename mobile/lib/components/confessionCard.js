@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { Text, View, Image } from 'react-native';
+import { Text, Image } from 'react-native';
 import moment from 'moment';
 
 import colors from '../constants/colors';

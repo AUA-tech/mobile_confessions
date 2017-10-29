@@ -1,10 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import {
-  StatusBar,
-  Text,
-  View
-} from 'react-native';
+import { StatusBar } from 'react-native';
 
 import colors from '../constants/colors';
 
