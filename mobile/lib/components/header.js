@@ -1,8 +1,7 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import styled from 'styled-components/native';
 import {
   StatusBar,
-  Image,
   Text,
   View
 } from 'react-native';
@@ -23,7 +22,7 @@ const CenteredView = styled.View`
   align-items: center;
   justify-content: center;
   background-color: ${colors.primaryColor}
-  height: 65;
+  height: 10%;
 `
 
 const HeaderText = styled.Text`
