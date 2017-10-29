@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
-import { FlatList, Text } from 'react-native';
+import { FlatList } from 'react-native';
 import { GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 
-import Header from '../components/header';
+import Layout from '../components/layout';
 import TabIcon from '../components/tabIcon';
 import ConfessionCard from '../components/confessionCard';
 import colors from '../constants/colors';
@@ -61,15 +61,16 @@ export default class ConfessionsFeedScreen extends PureComponent {
 
   render() {
     const { confessionsList } = this.state;
-    return [
-      <Header key='header' title="Feed" />,
-      <FlatList
-        key='scrollView'
-        data={confessionsList}
-        style={{backgroundColor: colors.bgColor}}
-        renderItem={ this.createConfessionCards }
-        keyExtractor={item => item.id}
-      />
-    ];
+    return (
+      <Layout headerTitle='Feed'>
+        <FlatList
+          key='scrollView'
+          data={confessionsList}
+          style={{backgroundColor: colors.bgColor}}
+          renderItem={ this.createConfessionCards }
+          keyExtractor={item => item.id}
+        />
+      </Layout>
+    );
   }
 }
