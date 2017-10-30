@@ -2,37 +2,37 @@ const authors = [
   {
     link: 'https://www.facebook.com/auaindulgence/',
     name: 'Admin',
-    image: '../assets/placeholder.jpg',
+    image: 'placeholder',
     description: 'Official, cute and mysterious admin of AUA Confessions',
   },
   {
     link: 'https://www.facebook.com/edgar.khanzadian',
     name: 'Edgar Khanzadian',
-    image: '../assets/edgark.jpg',
+    image: 'edgark',
     description: 'Developer',
   },
   {
     link: 'https://www.facebook.com/robert1999.g',
     name: 'Robert Gevorgyan',
-    image: '../assets/robertg.jpg',
+    image: 'robertg',
     description: 'Developer',
   },
   {
     link: 'https://www.facebook.com/gev.whiskeyhouse',
     name: 'Gevorg Hayrapetyan',
-    image: '../assets/gevorgh.jpg',
+    image: 'gevorgh',
     description: 'UI/UX Designer',
   },
   {
     link: 'https://www.facebook.com/aaronsarkissian',
     name: 'Aaron Sarkissian',
-    image: '../assets/aarons.jpg',
+    image: 'aarons',
     description: 'Back-end Developer',
   },
   {
     link: 'https://www.facebook.com/hayrapetyan.gurgen',
     name: 'Gurgen Hayrapetyan',
-    image: '../assets/gurgenh.jpg',
+    image: 'gurgenh',
     description: 'Data Scientist',
   },
 ]

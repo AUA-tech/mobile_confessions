@@ -14,7 +14,7 @@ const InfoCard = ({
   <CardView>
     <RowView>
       <AuthorImage
-        source={require('../assets/placeholder.png' )}
+        source={{uri: image }}
       />
       <ColumnView>
         <RowView style={{width: '100%'}}>
