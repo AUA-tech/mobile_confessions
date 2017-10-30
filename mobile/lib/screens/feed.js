@@ -1,13 +1,11 @@
 import React, { PureComponent } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, AsyncStorage } from 'react-native';
 import { GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 
 import Layout from '../components/layout';
 import TabIcon from '../components/tabIcon';
 import ConfessionCard from '../components/confessionCard';
 import colors from '../constants/colors';
-
-const accessToken = ''; // Paste your key here before using. This is temporary.
 
 export default class ConfessionsFeedScreen extends PureComponent {
   static navigationOptions = {
@@ -24,7 +22,8 @@ export default class ConfessionsFeedScreen extends PureComponent {
   constructor() {
     super();
     this.state = {
-      confessionsList: []
+      confessionsList: [],
+      accessToken: '',
     }
   }
 
@@ -42,7 +41,7 @@ export default class ConfessionsFeedScreen extends PureComponent {
     <ConfessionCard {...confession} />
   );
 
-  componentWillMount() {
+  generateGraphRequest = accessToken => {
     const infoRequest = new GraphRequest(
       '/auaindulgence/feed',
       {
@@ -57,6 +56,24 @@ export default class ConfessionsFeedScreen extends PureComponent {
     );
 
     new GraphRequestManager().addRequest(infoRequest).start();
+  }
+
+  async componentWillMount() {
+    try {
+      const asyncStorageToken = await AsyncStorage.getItem('@Confession:access_token');
+      if (asyncStorageToken !== null) {
+        this.generateGraphRequest(asyncStorageToken);
+        this.setState({ accessToken: asyncStorageToken });
+      } else {
+        const promise = await fetch('https://zcljj54dwg.execute-api.us-east-1.amazonaws.com/dev/confessions/get_access_token');
+        const result = await promise.json();
+        const accessToken = result.access_token;
+        await AsyncStorage.setItem('@Confession:access_token', accessToken);
+        this.setState({ accessToken })
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   render() {
