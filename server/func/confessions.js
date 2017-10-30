@@ -45,7 +45,10 @@ module.exports.get_access_token = (event, context, callback) => {
     FB.api('oauth/access_token', {
         client_id: process.env.FB_APP_ID,
         client_secret: process.env.FB_APP_SECRET,
-        grant_type: 'client_credentials'
+        grant_type: 'client_credentials',
+        scope: 'manage_pages, publish_pages',
+        apiVersion: "v2.10",
+        redirect_uri: 'http://localhost:3000/' // Should be the same as in FB's app settings
     }, res => {
         if (!res || res.error) {
             
@@ -82,9 +85,20 @@ module.exports.send_feedback = (event, context, callback) => {
     const {some_thing} = data;
 };
 function post_confession (confession) {
-    // TODO: Need to implement FB sdk so that 
-    // we are able to post confessions in the group
+
+    FB.setAccessToken(/*pageToken or userToken*/);
+
+    const msg = confession;
+    FB.api('me/feed', 'POST', { message: msg}, res => {
+        if(!res || res.error) {
+          console.log(!res ? 'error occurred' : res.error);
+          return;
+        }
+        console.log('Post Id: ' + res.id);
+    });
 }
+
+//TODO: Create another function for posting comments as Admin.
 
 
 function sendSomeEmail(params) {
