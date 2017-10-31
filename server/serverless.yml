@@ -9,6 +9,10 @@ provider:
   memorySize: 128
   timeout: 5
 
+  environment:
+    SUPPORT_EMAIL: ${file(./env.yml):SUPPORT_EMAIL}
+    ADMIN_EMAIL: ${file(./env.yml):ADMIN_EMAIL}
+
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -43,9 +47,6 @@ functions:
     
   send_confession:
     handler: func/confessions.send_confession
-    environment:
-      SUPPORT_EMAIL: ${file(./env.yml):SUPPORT_EMAIL}
-      ADMIN_EMAIL: ${file(./env.yml):ADMIN_EMAIL}
     events:
       - http:
           path: confessions/send_confession

@@ -18,12 +18,15 @@ module.exports.send_confession = (event, context, callback) => {
     if(data) {
         const {confession} = data;
         console.log(confession);
-        sendSomeEmail({confession})
+        sendSomeEmail({
+            to_email: process.env.ADMIN_EMAIL,
+            message: confession
+        })
         .then(() => {
             const response = {
                 statusCode: 200,
                 body: JSON.stringify({
-                    message: 'Sent to fb group',
+                    message: 'Success',
                     confession
                     // input: event
                 })
@@ -82,7 +85,31 @@ module.exports.get_access_token = (event, context, callback) => {
 }
 module.exports.send_feedback = (event, context, callback) => {
     const data = JSON.parse(event.body);
-    const {some_thing} = data;
+    if(data) {
+        const {feedback} = data;
+        sendSomeEmail({
+            to_email: process.env.SUPPORT_EMAIL,
+            message: feedback
+        })
+        .then(() => {
+            const response = {
+                statusCode: 200,
+                body: JSON.stringify({
+                    message: 'Success',
+                    feedback
+                })
+            };
+            context.succeed(response);
+        })
+    } else {
+        const response = {
+            statusCode: 200,
+            body: JSON.stringify({
+                message: 'Failure'
+            })
+        };
+        context.succeed(response);
+    }
 };
 function post_confession (confession) {
 
@@ -105,7 +132,7 @@ function sendSomeEmail(params) {
     var emailParams = {
       Destination: {
         ToAddresses: [
-            process.env.ADMIN_EMAIL
+            params.to_email
         ]
       },
       Message: {
@@ -128,7 +155,7 @@ function sendSomeEmail(params) {
               <body>
                 Hi man!
                 <br />
-                ${params.confession}
+                ${params.message}
               </body>
             </html>
   `,
