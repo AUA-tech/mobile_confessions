@@ -12,6 +12,7 @@ provider:
   environment:
     SUPPORT_EMAIL: ${file(./env.yml):SUPPORT_EMAIL}
     ADMIN_EMAIL: ${file(./env.yml):ADMIN_EMAIL}
+    FB_PAGE_TOKEN: ${file(./env.yml):FB_PAGE_TOKEN}
 
   iamRoleStatements:
     - Effect: Allow
@@ -20,31 +21,7 @@ provider:
       Resource: "*"
 
 functions:
-  
-  get_confession:
-    handler: func/confessions.get_confession
-    events:
-      - http:
-          path: confessions/get_confession
-          method: post
 
-  get_access_token:
-    handler: func/confessions.get_access_token
-    environment:
-      FB_APP_ID: ${file(./env.yml):FB_APP_ID}
-      FB_APP_SECRET: ${file(./env.yml):FB_APP_SECRET}
-    events:
-      - http:
-          path: confessions/get_access_token
-          method: get
-
-  process_conf:
-    handler: func/confessions.process_conf
-    events:
-      - http:
-          path: confessions/process_conf
-          method: post
-    
   send_confession:
     handler: func/confessions.send_confession
     events:

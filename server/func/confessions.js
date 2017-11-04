@@ -17,22 +17,27 @@ module.exports.send_confession = (event, context, callback) => {
     const data = JSON.parse(event.body);
     if(data) {
         const {confession} = data;
-        console.log(confession);
-        sendSomeEmail({
-            to_email: process.env.ADMIN_EMAIL,
-            message: confession
-        })
-        .then(() => {
-            const response = {
-                statusCode: 200,
-                body: JSON.stringify({
-                    message: 'Success',
-                    confession
-                    // input: event
-                })
-            };
-            context.succeed(response);
-        })
+        // TODO: run AI and get the function output in is_valid_confession
+        const is_valid_confession = true;
+        if(is_valid_confession) {
+            post_confession(context, confession);
+        } else {
+            sendSomeEmail({
+                to_email: process.env.ADMIN_EMAIL,
+                message: confession
+            })
+            .then(() => {
+                const response = {
+                    statusCode: 200,
+                    body: JSON.stringify({
+                        message: 'Success',
+                        confession
+                        // input: event
+                    })
+                };
+                context.succeed(response);
+            })
+        }
     } else {
         const response = {
             statusCode: 200,
@@ -71,17 +76,25 @@ module.exports.send_feedback = (event, context, callback) => {
         context.succeed(response);
     }
 };
-function post_confession (confession) {
+function post_confession (context, confession) {
 
     FB.setAccessToken(process.env.FB_PAGE_TOKEN);
 
-    const msg = confession;
-    FB.api('me/feed', 'POST', { message: msg}, res => {
+    FB.api('me/feed', 'POST', { message: confession }, res => {
         if(!res || res.error) {
           console.log(!res ? 'error occurred' : res.error);
           return;
+        } else {
+            console.log('Post Id: ' + res.id);
         }
-        console.log('Post Id: ' + res.id);
+        const response = {
+            statusCode: 200,
+            body: JSON.stringify({
+                message: 'Success',
+                confession
+            })
+        };
+        context.succeed(response);
     });
 }
 
