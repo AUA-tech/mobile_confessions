@@ -26,6 +26,11 @@ export default class NewConfessionScreen extends PureComponent {
 
   onTextChange = confession => this.setState({ confession });
 
+  sendConfession = () => {
+    const { confession } = this.state;
+    awsPost('send_confession', { confession });
+  }
+
   render() {
     return (
       <Layout headerTitle='Confess'>
@@ -47,7 +52,7 @@ export default class NewConfessionScreen extends PureComponent {
           <AttachedFilesBox />
         </AttachmentContainer>
         <Button
-          onPress={() => { console.log('Pressed') }}
+          onPress={this.sendConfession}
           title='Submit'
         />
       </Layout>
