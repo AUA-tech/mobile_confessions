@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import { FlatList, AsyncStorage } from 'react-native';
+import { FlatList, AsyncStorage, ActivityIndicator } from 'react-native';
+import { differenceBy } from 'lodash';
 import { GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 
 import Layout from '../components/layout';
@@ -25,15 +26,21 @@ export default class ConfessionsFeedScreen extends PureComponent {
     this.state = {
       confessionsList: [],
       accessToken: '',
+      fetchStatus: 1,
     }
   }
 
   responseInfoCallback = (error, result) => {
     if (error) {
       console.log('Error fetching data: ', error);
+      this.setState({ fetchStatus: 0 }); // May later change to 4, which will mean error: not needed yet
     } else {
-      const { data: confessionsList, paging } = result;
-      this.setState({ confessionsList, paging });
+      const { confessionsList } = this.state;
+      const { data, paging } = result;
+      const newPostsList = differenceBy(data, confessionsList, 'id');
+      const newList = [ ...newPostsList, ...confessionsList ];
+      // status 0 means nothing to load
+      this.setState({ confessionsList: newList, paging, fetchStatus: 0 });
     }
   }
 
@@ -42,6 +49,7 @@ export default class ConfessionsFeedScreen extends PureComponent {
   );
 
   generateGraphRequest = accessToken => {
+    this.setState({ fetchStatus: 1 }); // loading
     const infoRequest = new GraphRequest(
       '/auaindulgence/feed',
       {
@@ -56,6 +64,21 @@ export default class ConfessionsFeedScreen extends PureComponent {
     );
 
     new GraphRequestManager().addRequest(infoRequest).start();
+  }
+
+  fetchMore = async accessToken => {
+    const { paging, confessionsList } = this.state;
+    this.setState({ fetchStatus: 1 }); // loading
+    try {
+      const promise = await fetch(paging.next);
+      const result = await promise.json();
+      const { data, paging: newPaging } = result;
+      const newPostsList = differenceBy(data, confessionsList, 'id');
+      const newList = [ ...confessionsList, ...newPostsList ];
+      this.setState({ confessionsList: newList, paging: newPaging, fetchStatus: 0 });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async componentWillMount() {
@@ -78,7 +101,7 @@ export default class ConfessionsFeedScreen extends PureComponent {
   }
 
   render() {
-    const { confessionsList } = this.state;
+    const { confessionsList, accessToken, fetchStatus } = this.state;
     return (
       <Layout headerTitle='Feed'>
         <FlatList
@@ -87,7 +110,14 @@ export default class ConfessionsFeedScreen extends PureComponent {
           style={{backgroundColor: colors.bgColor}}
           renderItem={ this.createConfessionCards }
           keyExtractor={item => item.id}
+          refreshing={fetchStatus === 2}
+          onRefresh={() => this.generateGraphRequest(accessToken)}
+          onEndReachedThreshold={0.0}
+          onEndReached={() => this.fetchMore(accessToken)}
         />
+        { fetchStatus !== 1 ? null :
+          <ActivityIndicator />
+        }
       </Layout>
     );
   }
