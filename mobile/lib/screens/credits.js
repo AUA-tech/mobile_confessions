@@ -38,7 +38,7 @@ export default class NewConfessionScreen extends PureComponent {
     return (
       <Layout headerTitle='Credits'>
         <StyledTextInput
-          multiline = {true}
+          multiline
           numberOfLines = {4}
           onChangeText={this.onTextChange}
           value={this.state.feedback}

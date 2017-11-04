@@ -35,7 +35,7 @@ export default class NewConfessionScreen extends PureComponent {
     return (
       <Layout headerTitle='Confess'>
         <StyledTextInput
-          multiline = {true}
+          multiline
           numberOfLines = {4}
           onChangeText={this.onTextChange}
           value={this.state.confession}
@@ -44,9 +44,9 @@ export default class NewConfessionScreen extends PureComponent {
         />
         <AttachmentContainer>
           <AttachmentText
-            multiline = {true}
+            multiline
             numberOfLines = {4}
-            placeholder={'Confess yourself here'}
+            placeholder={'This will be changed later'}
             placeholderTextColor={colors.placeholderColor}
           />
           <AttachedFilesBox />
