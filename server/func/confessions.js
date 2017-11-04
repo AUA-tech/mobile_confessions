@@ -70,6 +70,42 @@ function post_confession (context, confession) {
     });
 }
 
+function post_comment (context, postID, comment) {
+
+    FB.setAccessToken(process.env.FB_PAGE_TOKEN);
+
+    FB.api(`${postID}/comments`, 'POST', { message: comment }, res => {
+        if(!res || res.error) {
+          console.log(!res ? 'error occurred' : res.error);
+          return;
+        } else {
+            console.log('Comment Id: ' + res.id);
+        }
+        context_succeed(context, {
+            message: 'Success',
+            comment
+        })
+    });
+}
+
+function post_comment_reply (context, commentID, comment) {
+
+    FB.setAccessToken(process.env.FB_PAGE_TOKEN);
+
+    FB.api(`${commentID}/comments`, 'POST', { message: comment }, res => {
+        if(!res || res.error) {
+          console.log(!res ? 'error occurred' : res.error);
+          return;
+        } else {
+            console.log('Comment Id: ' + res.id);
+        }
+        context_succeed(context, {
+            message: 'Success',
+            comment
+        })
+    });
+}
+
 function context_succeed (context, body) {
     const response = {
         statusCode: 200,
