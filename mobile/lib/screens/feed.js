@@ -6,7 +6,7 @@ import Layout from '../components/layout';
 import TabIcon from '../components/tabIcon';
 import ConfessionCard from '../components/confessionCard';
 import colors from '../constants/colors';
-import awsFetch from '../utils';
+import { awsGet } from '../utils';
 
 export default class ConfessionsFeedScreen extends PureComponent {
   static navigationOptions = {
@@ -33,7 +33,6 @@ export default class ConfessionsFeedScreen extends PureComponent {
       console.log('Error fetching data: ', error);
     } else {
       const { data: confessionsList, paging } = result;
-      console.log(confessionsList);
       this.setState({ confessionsList, paging });
     }
   }
@@ -66,7 +65,7 @@ export default class ConfessionsFeedScreen extends PureComponent {
         this.generateGraphRequest(asyncStorageToken);
         this.setState({ accessToken: asyncStorageToken });
       } else {
-        const promise = await awsFetch('get_access_token');
+        const promise = await awsGet('get_access_token');
         const result = await promise.json();
         const accessToken = result.access_token;
         await AsyncStorage.setItem('@Confession:access_token', accessToken);

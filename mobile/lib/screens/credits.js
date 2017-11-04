@@ -7,6 +7,7 @@ import Button from '../components/button';
 import InfoCard from '../components/infoCard';
 import colors from '../constants/colors';
 import authors from '../constants/authors';
+import { awsPost } from '../utils';
 
 export default class NewConfessionScreen extends PureComponent {
   static navigationOptions = {
@@ -28,6 +29,11 @@ export default class NewConfessionScreen extends PureComponent {
 
   onTextChange = feedback => this.setState({ feedback });
 
+  sendFeedback = () => {
+    const { feedback } = this.state;
+    awsPost('send_feedback', { feedback });
+  }
+
   render() {
     return (
       <Layout headerTitle='Credits'>
@@ -40,7 +46,7 @@ export default class NewConfessionScreen extends PureComponent {
           placeholderTextColor={colors.placeholderColor}
         />
         <Button
-          onPress={() => { console.log('Pressed') }}
+          onPress={this.sendFeedback}
           title='Send Feedback'
         />
         <AuthorsScrollView>
