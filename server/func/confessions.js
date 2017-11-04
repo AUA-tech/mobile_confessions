@@ -4,14 +4,6 @@ const uuid = require('uuid');
 const FB = require('fb');
 const SES = new AWS.SES();
 
-module.exports.get_confession = (event, context, callback) => {
-    const data = JSON.parse(event.body);
-    const {some_thing} = data;
-};
-module.exports.process_conf = (event, context, callback) => {
-    const data = JSON.parse(event.body);
-    const {some_thing} = data;
-};
 module.exports.send_confession = (event, context, callback) => {
     console.log(event.body);
     const data = JSON.parse(event.body);
