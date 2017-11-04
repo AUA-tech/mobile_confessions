@@ -73,7 +73,7 @@ module.exports.send_feedback = (event, context, callback) => {
 };
 function post_confession (confession) {
 
-    FB.setAccessToken(/*pageToken or userToken*/);
+    FB.setAccessToken(process.env.FB_PAGE_TOKEN);
 
     const msg = confession;
     FB.api('me/feed', 'POST', { message: msg}, res => {
