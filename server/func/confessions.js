@@ -14,7 +14,7 @@ module.exports.send_confession = (event, context, callback) => {
         if(is_valid_confession) {
             post_confession(context, confession);
         } else {
-            sendSomeEmail({
+            send_email({
                 to_email: process.env.ADMIN_EMAIL,
                 message: confession
             })
@@ -35,7 +35,7 @@ module.exports.send_feedback = (event, context, callback) => {
     const data = JSON.parse(event.body);
     if(data) {
         const {feedback} = data;
-        sendSomeEmail({
+        send_email({
             to_email: process.env.SUPPORT_EMAIL,
             message: feedback
         })
@@ -78,7 +78,7 @@ function context_succeed (context, body) {
     context.succeed(response);
 }
 
-function sendSomeEmail(params) {
+function send_email(params) {
     var emailParams = {
       Destination: {
         ToAddresses: [
