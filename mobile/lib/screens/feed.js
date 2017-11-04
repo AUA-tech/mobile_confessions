@@ -83,18 +83,8 @@ export default class ConfessionsFeedScreen extends PureComponent {
 
   async componentWillMount() {
     try {
-      const asyncStorageToken = await AsyncStorage.getItem('@Confession:access_token');
-      if (asyncStorageToken !== null) {
-        this.generateGraphRequest(asyncStorageToken);
-        this.setState({ accessToken: asyncStorageToken });
-      } else {
-        const promise = await awsGet('get_access_token');
-        const result = await promise.json();
-        const accessToken = result.access_token;
-        await AsyncStorage.setItem('@Confession:access_token', accessToken);
-        this.setState({ accessToken })
-        this.generateGraphRequest(accessToken);
-      }
+      const { accessToken } = this.state;
+      this.generateGraphRequest(accessToken);
     } catch (error) {
       console.log(error);
     }
