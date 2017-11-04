@@ -43,46 +43,6 @@ module.exports.send_confession = (event, context, callback) => {
         context.succeed(response);
     }
 };
-module.exports.get_access_token = (event, context, callback) => {
-
-    FB.api('oauth/access_token', {
-        client_id: process.env.FB_APP_ID,
-        client_secret: process.env.FB_APP_SECRET,
-        grant_type: 'client_credentials',
-        scope: 'manage_pages, publish_pages',
-        apiVersion: "v2.10",
-        redirect_uri: 'http://localhost:3000/' // Should be the same as in FB's app settings
-    }, res => {
-        if (!res || res.error) {
-            
-            const error_message = !res ? 'error occurred during the token request' : res.error;
-            const response = {
-                statusCode: 200,
-                body: JSON.stringify({
-                    message: 'Didnt work'
-                })
-            };
-            context.succeed(response);
-            // context.failed(new Error(error_message));
-            console.log(error_message);
-            return;
-        }
-        const {
-            access_token
-        } = res;
-
-        const response = {
-            statusCode: 200,
-            body: JSON.stringify({
-                message: 'Success',
-                access_token
-            })
-        };
-        context.succeed(response);
-        // FB.setAccessToken(access_token);
-    });
-
-}
 module.exports.send_feedback = (event, context, callback) => {
     const data = JSON.parse(event.body);
     if(data) {
