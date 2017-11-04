@@ -14,7 +14,7 @@ export default class NewConfessionScreen extends PureComponent {
     tabBarLabel: 'Credits',
     tabBarIcon: ({ tintColor }) => (
       <TabIcon
-        source={require('../assets/info-icon.png')}
+        source={require('../assets/credits-icon.png')}
         tintColor={tintColor}
       />
     ),

@@ -14,7 +14,7 @@ export default class ConfessionsFeedScreen extends PureComponent {
     // Note: By default the icon is only shown on iOS. Search the showIcon option below.
     tabBarIcon: ({ tintColor }) => (
       <TabIcon
-        source={require('../assets/chats-icon.png')}
+        source={require('../assets/feed-icon.png')}
         tintColor={tintColor}
       />
     ),
