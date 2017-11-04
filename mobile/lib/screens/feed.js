@@ -6,6 +6,7 @@ import Layout from '../components/layout';
 import TabIcon from '../components/tabIcon';
 import ConfessionCard from '../components/confessionCard';
 import colors from '../constants/colors';
+import awsFetch from '../utils';
 
 export default class ConfessionsFeedScreen extends PureComponent {
   static navigationOptions = {
@@ -65,11 +66,12 @@ export default class ConfessionsFeedScreen extends PureComponent {
         this.generateGraphRequest(asyncStorageToken);
         this.setState({ accessToken: asyncStorageToken });
       } else {
-        const promise = await fetch('https://zcljj54dwg.execute-api.us-east-1.amazonaws.com/dev/confessions/get_access_token');
+        const promise = await awsFetch('get_access_token');
         const result = await promise.json();
         const accessToken = result.access_token;
         await AsyncStorage.setItem('@Confession:access_token', accessToken);
         this.setState({ accessToken })
+        this.generateGraphRequest(accessToken);
       }
     } catch (error) {
       console.log(error);
