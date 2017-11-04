@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { Text } from 'react-native';
+import { Text, TouchableOpacity, Linking } from 'react-native';
 import moment from 'moment';
 
 import colors from '../constants/colors';
@@ -19,7 +19,11 @@ const InfoCard = ({
       <ColumnView>
         <RowView style={{width: '100%'}}>
           <AuthorName>{name}</AuthorName>
-          <Text>Icon</Text>
+          <TouchableOpacity onPress={() => { Linking.openURL(link).catch(err => console.error('An error occurred', err)) }}>
+              <Icon
+                source={require('../assets/info.png')}
+              />
+          </TouchableOpacity>
         </RowView>
         <DescriptionText>{description}</DescriptionText>
       </ColumnView>
@@ -56,6 +60,11 @@ const ColumnView = styled.View`
 const CardView = styled.View`
   padding-horizontal: 20;
   margin-bottom: 20;
+`
+
+const Icon = styled.Image`
+  width: 22;
+  height: 22;
 `
 
 export default InfoCard;
