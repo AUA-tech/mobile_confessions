@@ -19,25 +19,16 @@ module.exports.send_confession = (event, context, callback) => {
                 message: confession
             })
             .then(() => {
-                const response = {
-                    statusCode: 200,
-                    body: JSON.stringify({
-                        message: 'Success',
-                        confession
-                        // input: event
-                    })
-                };
-                context.succeed(response);
+                context_succeed(context, {
+                    message: 'Success',
+                    confession
+                })
             })
         }
     } else {
-        const response = {
-            statusCode: 200,
-            body: JSON.stringify({
-                message: 'Didn\'t work'
-            })
-        };
-        context.succeed(response);
+        context_succeed(context, {
+            message: 'Failure'
+        })
     }
 };
 module.exports.send_feedback = (event, context, callback) => {
@@ -49,25 +40,18 @@ module.exports.send_feedback = (event, context, callback) => {
             message: feedback
         })
         .then(() => {
-            const response = {
-                statusCode: 200,
-                body: JSON.stringify({
-                    message: 'Success',
-                    feedback
-                })
-            };
-            context.succeed(response);
+            context_succeed(context, {
+                message: 'Success',
+                feedback
+            })
         })
     } else {
-        const response = {
-            statusCode: 200,
-            body: JSON.stringify({
-                message: 'Failure'
-            })
-        };
-        context.succeed(response);
+        context_succeed(context, {
+            message: 'Failure'
+        })
     }
 };
+
 function post_confession (context, confession) {
 
     FB.setAccessToken(process.env.FB_PAGE_TOKEN);
@@ -79,19 +63,20 @@ function post_confession (context, confession) {
         } else {
             console.log('Post Id: ' + res.id);
         }
-        const response = {
-            statusCode: 200,
-            body: JSON.stringify({
-                message: 'Success',
-                confession
-            })
-        };
-        context.succeed(response);
+        context_succeed(context, {
+            message: 'Success',
+            confession
+        })
     });
 }
 
-//TODO: Create another function for posting comments as Admin.
-
+function context_succeed (context, body) {
+    const response = {
+        statusCode: 200,
+        body: JSON.stringify(body)
+    };
+    context.succeed(response);
+}
 
 function sendSomeEmail(params) {
     var emailParams = {
