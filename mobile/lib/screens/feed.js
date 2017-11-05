@@ -104,7 +104,7 @@ export default class ConfessionsFeedScreen extends PureComponent {
           keyExtractor={item => item.id}
           refreshing={fetchStatus === 2}
           onRefresh={() => this.generateGraphRequest(accessToken)}
-          onEndReachedThreshold={0.0}
+          onEndReachedThreshold={0.2}
           onEndReached={() => this.fetchMore(accessToken)}
         />
         { fetchStatus !== 1 ? null :

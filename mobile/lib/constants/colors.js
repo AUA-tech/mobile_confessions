@@ -1,5 +1,6 @@
 const colors = {
   primaryColor: '#3A4F60',
+  inactiveTintColor: '#BBC2C9',
   sucessColor: '#53D769',
   bgColor: '#EAEAEA',
   headerColor: '#4B4B4B',
