@@ -53,8 +53,10 @@ export default class ConfessionsFeedScreen extends PureComponent {
     const infoRequest = new GraphRequest(
       '/auaindulgence/feed',
       {
-        accessToken: accessToken,
         parameters: {
+          access_token: {
+            string: accessToken
+          },
           fields: {
             string: 'id,message,link,created_time,attachments,picture,full_picture',
           }
