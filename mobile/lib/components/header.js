@@ -19,6 +19,7 @@ const CenteredView = styled.View`
   justify-content: center;
   background-color: ${colors.primaryColor}
   height: 10%;
+  min-height: 50;
 `
 
 const HeaderText = styled.Text`

@@ -29,9 +29,10 @@ export default class NewConfessionScreen extends PureComponent {
 
   onTextChange = feedback => this.setState({ feedback });
 
-  sendFeedback = () => {
+  sendFeedback = async () => {
     const { feedback } = this.state;
-    awsPost('send_feedback', { feedback });
+    await awsPost('send_feedback', { feedback });
+    this.setState({ feedback: '' })
   }
 
   render() {
@@ -60,6 +61,7 @@ export default class NewConfessionScreen extends PureComponent {
 const StyledTextInput = styled.TextInput`
   height: 25%;
   width: 100%;
+  min-height: 100;
   background-color: white;
   margin-top: 2%;
   padding: 20px;

@@ -13,6 +13,7 @@ const Button = ({ onPress, title }) => (
 
 const CustomTouchableOpacity = styled.TouchableOpacity`
   height: 10%;
+  min-height: 50;
 `
 
 const ButtonWrapper = styled.View`
