@@ -5,6 +5,7 @@ import Layout from '../components/layout';
 import TabIcon from '../components/tabIcon';
 import Button from '../components/button';
 import InfoCard from '../components/infoCard';
+import SendNotification from '../components/sendNotification';
 import colors from '../constants/colors';
 import authors from '../constants/authors';
 import { awsPost } from '../utils';
@@ -24,6 +25,8 @@ export default class NewConfessionScreen extends PureComponent {
     super();
     this.state = {
       feedback: '',
+      show_notification: false,
+      message: ''
     }
   }
 
@@ -31,13 +34,24 @@ export default class NewConfessionScreen extends PureComponent {
 
   sendFeedback = async () => {
     const { feedback } = this.state;
-    await awsPost('send_feedback', { feedback });
-    this.setState({ feedback: '' })
+    const fetched_res = await awsPost('send_feedback', { feedback });
+    const res = await fetched_res.json();
+
+    if(res.message === "Success") {
+      this.setState({ feedback: '', show_notification: true, message: 'Feedback Submitted' })
+    } else {
+      this.setState({ feedback: '', show_notification: true, message: 'Oops, something wrong' })
+    }
   }
 
   render() {
     return (
       <Layout headerTitle='Credits'>
+        <SendNotification
+          show_notification={ this.state.show_notification }
+          done={ () => this.setState({ show_notification: false }) }
+          message={this.state.message}
+        />
         <StyledTextInput
           multiline
           numberOfLines = {4}

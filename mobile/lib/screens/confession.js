@@ -26,16 +26,23 @@ export default class NewConfessionScreen extends PureComponent {
     super();
     this.state = {
       confession: '',
-      show_notification: false
+      show_notification: false,
+      message: ''
     }
   }
 
   onTextChange = confession => this.setState({ confession });
 
-  sendConfession = () => {
+  sendConfession = async () => {
     const { confession } = this.state;
-    this.setState({confession: '', show_notification: true})
-    awsPost('send_confession', { confession });
+    const fetched_res = await awsPost('send_confession', { confession });
+    const res = await fetched_res.json();
+
+    if(res.message === "Success") {
+      this.setState({ confession: '', show_notification: true, message: 'Confession Submitted' })
+    } else {
+      this.setState({ confession: '', show_notification: true, message: 'Oops, something wrong' })
+    }
   }
 
   render() {
@@ -44,7 +51,7 @@ export default class NewConfessionScreen extends PureComponent {
         <SendNotification
           show_notification={ this.state.show_notification }
           done={ () => this.setState({show_notification: false}) }
-          message="Confession Submitted"
+          message={this.state.message}
         />
         <StyledTextInput
           multiline
