@@ -7,13 +7,16 @@
 		"test": "jest"
 	},
 	"rnpm": {
-		"assets": ["./assets/fonts"]
+		"assets": [
+			"./assets/fonts"
+		]
 	},
 	"dependencies": {
 		"lodash": "^4.17.4",
 		"moment": "^2.19.1",
 		"react": "16.0.0-beta.5",
 		"react-native": "0.49.3",
+		"react-native-actionsheet": "^2.3.0",
 		"react-native-fbsdk": "^0.6.3",
 		"react-navigation": "^1.0.0-beta.15",
 		"styled-components": "^2.2.2"

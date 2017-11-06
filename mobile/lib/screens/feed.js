@@ -58,7 +58,7 @@ export default class ConfessionsFeedScreen extends PureComponent {
             string: accessToken
           },
           fields: {
-            string: 'id,message,link,created_time,attachments,picture,full_picture',
+            string: 'id,message,link,created_time,attachments,picture,full_picture,reactions,comments',
           }
         }
       },
