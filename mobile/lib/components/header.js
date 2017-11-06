@@ -10,7 +10,7 @@ const Header = ({ title }) => (
       backgroundColor={colors.primaryColor}
       barStyle="light-content"
     />
-    <HeaderText>{title.toUpperCase()}</HeaderText>
+    <HeaderText>{title}</HeaderText>
   </CenteredView>
 );
 
