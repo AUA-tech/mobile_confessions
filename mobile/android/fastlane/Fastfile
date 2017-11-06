@@ -40,6 +40,13 @@ platform :android do
     supply
   end
 
+  lane :deploy_alpha do
+    gradle(task: "assembleRelease")
+    supply(
+      track: "alpha",
+    )
+  end
+
   # You can define as many lanes as you want
 
   after_all do |lane|
