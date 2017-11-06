@@ -1,9 +1,12 @@
 import React, { PureComponent } from 'react';
+import { Text, Animated } from 'react-native';
 import styled from 'styled-components/native';
 
 import Layout from '../components/layout';
 import TabIcon from '../components/tabIcon';
 import Button from '../components/button';
+import SendNotification from '../components/sendNotification';
+
 import colors from '../constants/colors';
 
 export default class NewConfessionScreen extends PureComponent {
@@ -21,6 +24,7 @@ export default class NewConfessionScreen extends PureComponent {
     super();
     this.state = {
       confession: '',
+      show_notification: false
     }
   }
 
@@ -28,12 +32,18 @@ export default class NewConfessionScreen extends PureComponent {
 
   sendConfession = () => {
     const { confession } = this.state;
+    this.setState({confession: '', show_notification: true})
     awsPost('send_confession', { confession });
   }
 
   render() {
     return (
       <Layout headerTitle='Confess'>
+        <SendNotification
+          show_notification={ this.state.show_notification }
+          done={ () => this.setState({show_notification: false}) }
+          message="Confession Submitted"
+        />
         <StyledTextInput
           multiline
           numberOfLines = {4}
