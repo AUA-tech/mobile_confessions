@@ -9,6 +9,8 @@ import SendNotification from '../components/sendNotification';
 
 import colors from '../constants/colors';
 
+import { awsPost } from '../utils';
+
 export default class NewConfessionScreen extends PureComponent {
   static navigationOptions = {
     tabBarLabel: 'Confess',
