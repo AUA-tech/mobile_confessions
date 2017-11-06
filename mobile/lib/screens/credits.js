@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { Keyboard } from 'react-native';
 import styled from 'styled-components/native';
 
 import Layout from '../components/layout';
@@ -34,6 +35,7 @@ export default class NewConfessionScreen extends PureComponent {
 
   sendFeedback = async () => {
     const { feedback } = this.state;
+    Keyboard.dismiss();
     if(feedback.trim() !== '') {
       const fetched_res = await awsPost('send_feedback', { feedback });
       const res = await fetched_res.json();
