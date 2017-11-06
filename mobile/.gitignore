@@ -52,3 +52,6 @@ buck-out/
 */fastlane/Preview.html
 */fastlane/screenshots
 */fastlane/metadata
+
+# android secret json
+authenticate.json
