@@ -48,6 +48,7 @@ export default class NewConfessionScreen extends PureComponent {
   }
 
   render() {
+    const { confession } = this.state;
     return (
       <Layout headerTitle='Confess'>
         <SendNotification
@@ -73,6 +74,7 @@ export default class NewConfessionScreen extends PureComponent {
           <AttachedFilesBox />
         </AttachmentContainer>
         <Button
+          disabled={!confession.trim()}
           onPress={this.sendConfession}
           title='Submit'
         />

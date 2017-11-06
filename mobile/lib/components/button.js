@@ -3,9 +3,9 @@ import styled from 'styled-components/native';
 
 import colors from '../constants/colors';
 
-const Button = ({ onPress, title }) => (
-  <CustomTouchableOpacity onPress={onPress}>
-    <ButtonWrapper>
+const Button = ({ onPress, title, disabled }) => (
+  <CustomTouchableOpacity disabled={disabled} onPress={onPress}>
+    <ButtonWrapper disabled={disabled}>
       <ButtonTitle>{ title.toUpperCase() }</ButtonTitle>
     </ButtonWrapper>
   </CustomTouchableOpacity>
@@ -21,7 +21,7 @@ const ButtonWrapper = styled.View`
   height: 100%;
   justify-content: center;
   align-items: center;
-  background-color: ${colors.sucessColor};
+  background-color: ${props => props.disabled ? colors.placeholderColor : colors.sucessColor};
   padding-vertical: 20;
 `
 const ButtonTitle = styled.Text`

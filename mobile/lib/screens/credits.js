@@ -49,6 +49,7 @@ export default class NewConfessionScreen extends PureComponent {
   }
 
   render() {
+    const { feedback } = this.state;
     return (
       <Layout headerTitle='Credits'>
         <SendNotification
@@ -65,6 +66,7 @@ export default class NewConfessionScreen extends PureComponent {
           placeholderTextColor={colors.placeholderColor}
         />
         <Button
+          disabled={!feedback.trim()}
           onPress={this.sendFeedback}
           title='Send Feedback'
         />
