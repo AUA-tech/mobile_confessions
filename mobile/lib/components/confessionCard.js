@@ -1,13 +1,16 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { Text, Image, View, Dimensions, Alert } from 'react-native';
+import { Text, Image, View, Dimensions, Alert, AsyncStorage } from 'react-native';
 import moment from 'moment';
 import ActionSheet from 'react-native-actionsheet'
 
 import colors from '../constants/colors';
 const {height, width} = Dimensions.get('window');
 
+let actionsheet_selected_id = '';
+
 const ConfessionCard = ({
+  id,
   link,
   message,
   picture,
@@ -16,7 +19,7 @@ const ConfessionCard = ({
   created_time,
   reactions,
   comments,
-  showActionSheet
+  hide_post
 }) => {
   // If image attachment exists, get it's ratio
   const image_height = attachments ? attachments.data[0].media.image.height : undefined;
@@ -48,7 +51,10 @@ const ConfessionCard = ({
           <Text style={{paddingHorizontal: 5}}>{number_of_reactions} Likes</Text>
           <Text style={{paddingHorizontal: 5}}>{number_of_comments} Comment</Text>
         </RowView>
-        <ActionView onPress={ () => this.ActionSheet.show()}>
+        <ActionView onPress={ () => {
+          this.ActionSheet.show();
+          actionsheet_selected_id = id;
+        }}>
           <Text>=></Text>
         </ActionView>
       </RowView>
@@ -57,23 +63,30 @@ const ConfessionCard = ({
         options={['Cancel', 'Hide', 'Report']}
         cancelButtonIndex={0}
         destructiveButtonIndex={2}
-        onPress={handle_action_sheet}
+        onPress={(i) => handle_action_sheet(i, hide_post)}
       />
     </CardView>
   );
 }
 
-const handle_action_sheet = (index) => {
+const handle_action_sheet = (index, hide_post) => {
+
   switch (index) {
     case 0:
       console.warn('Close ActionSheet');
       break;
     case 1:
-      console.warn('Hide Post');
       Alert.alert(`Hide this post?`, '', [
         {text: 'No', onPress: null, style: 'cancel'},
-        {text: 'Yes', onPress: () => {
-          console.warn('YES');
+        {text: 'Yes', onPress: async () => {
+          const hided_posts_str = await AsyncStorage.getItem('hided_posts');
+          const hided_posts = JSON.parse(hided_posts_str);
+
+          hide_post(actionsheet_selected_id);
+          hided_posts.push(actionsheet_selected_id);
+
+          const updated_hided_posts_str = JSON.stringify(hided_posts);
+          AsyncStorage.setItem('hided_posts', updated_hided_posts_str);
         }}
       ]);
       break;

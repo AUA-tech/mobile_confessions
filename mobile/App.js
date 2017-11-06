@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform } from 'react-native';
+import { Platform, AsyncStorage } from 'react-native';
 import { TabNavigator } from 'react-navigation';
 
 import colors from './lib/constants/colors';
@@ -52,5 +52,15 @@ const options = Platform.select({
 })
 
 const MyApp = TabNavigator(screens, options);
+MyApp.prototype.componentDidMount = function () {
+  AsyncStorage.getItem('hided_posts', (err, res) => {
+    if(err) {
+      console.warn('AsyncStorage error', err);
+      return;
+    }
+    if(res === null)
+      AsyncStorage.setItem('hided_posts', JSON.stringify([]));
+  })
+}
 
 export default MyApp;

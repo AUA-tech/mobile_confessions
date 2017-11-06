@@ -27,7 +27,13 @@ export default class ConfessionsFeedScreen extends PureComponent {
       confessionsList: [],
       accessToken: '',
       fetchStatus: 1,
+      hided_posts: []
     }
+  }
+  async componentDidMount(){
+    const hided_posts_str = await AsyncStorage.getItem('hided_posts');
+    const hided_posts = JSON.parse(hided_posts_str);
+    this.setState({hided_posts: hided_posts ? hided_posts : []});
   }
 
   responseInfoCallback = (error, result) => {
@@ -45,7 +51,10 @@ export default class ConfessionsFeedScreen extends PureComponent {
   }
 
   createConfessionCards = ({ item: confession }) => (
-    <ConfessionCard {...confession} />
+    <ConfessionCard
+      {...confession}
+      hide_post={(new_hided_post) => this.setState({hided_posts: [...this.state.hided_posts, new_hided_post]})}
+    />
   );
 
   generateGraphRequest = accessToken => {
@@ -94,11 +103,14 @@ export default class ConfessionsFeedScreen extends PureComponent {
 
   render() {
     const { confessionsList, accessToken, fetchStatus } = this.state;
+    const filteredConfessionList = confessionsList.filter((post) => {
+      return !this.state.hided_posts.includes(post.id);
+    })
     return (
       <Layout headerTitle='Feed'>
         <FlatList
           key='scrollView'
-          data={confessionsList}
+          data={filteredConfessionList}
           style={{backgroundColor: colors.bgColor}}
           renderItem={ this.createConfessionCards }
           keyExtractor={item => item.id}
