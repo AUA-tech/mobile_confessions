@@ -34,13 +34,15 @@ export default class NewConfessionScreen extends PureComponent {
 
   sendFeedback = async () => {
     const { feedback } = this.state;
-    const fetched_res = await awsPost('send_feedback', { feedback });
-    const res = await fetched_res.json();
+    if(feedback.trim() !== '') {
+      const fetched_res = await awsPost('send_feedback', { feedback });
+      const res = await fetched_res.json();
 
-    if(res.message === "Success") {
-      this.setState({ feedback: '', show_notification: true, message: 'Feedback Submitted' })
-    } else {
-      this.setState({ feedback: '', show_notification: true, message: 'Oops, something wrong' })
+      if(res.message === "Success") {
+        this.setState({ feedback: '', show_notification: true, message: 'Feedback Submitted' })
+      } else {
+        this.setState({ feedback: '', show_notification: true, message: 'Oops, something wrong' })
+      }
     }
   }
 

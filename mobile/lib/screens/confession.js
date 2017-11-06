@@ -35,13 +35,15 @@ export default class NewConfessionScreen extends PureComponent {
 
   sendConfession = async () => {
     const { confession } = this.state;
-    const fetched_res = await awsPost('send_confession', { confession });
-    const res = await fetched_res.json();
+    if(confession.trim() !== '') {
+      const fetched_res = await awsPost('send_confession', { confession });
+      const res = await fetched_res.json();
 
-    if(res.message === "Success") {
-      this.setState({ confession: '', show_notification: true, message: 'Confession Submitted' })
-    } else {
-      this.setState({ confession: '', show_notification: true, message: 'Oops, something wrong' })
+      if(res.message === "Success") {
+        this.setState({ confession: '', show_notification: true, message: 'Confession Submitted' })
+      } else {
+        this.setState({ confession: '', show_notification: true, message: 'Oops, something wrong' })
+      }
     }
   }
 
