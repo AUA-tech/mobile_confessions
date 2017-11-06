@@ -29,7 +29,7 @@ const ConfessionCard = ({
           <NumberText>{confessionNumber}</NumberText>
           <DateText>{moment(created_time).format('MMM D, HH:MM')}</DateText>
         </RowView>
-        <Text>{clearedMessage}</Text>
+        <Text style={{fontFamily: 'Roboto'}}>{clearedMessage}</Text>
       </TextContentView>
       { !full_picture ? null :
         <Image
