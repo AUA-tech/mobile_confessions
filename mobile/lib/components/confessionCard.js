@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { Text, Image, View, Dimensions, Alert, AsyncStorage } from 'react-native';
+import { Text, Image, View, Dimensions, Alert, AsyncStorage, Linking } from 'react-native';
 import moment from 'moment';
-
+import linkify from 'linkify-it';
+const linkify_it = linkify();
 import colors from '../constants/colors';
 const {height, width} = Dimensions.get('window');
 
@@ -28,6 +29,21 @@ const ConfessionCard = ({
   const confessionNumberMatch = message.match(/#([0-9]+)\d/); // Match a regexp for extracting confession number
   const confessionNumber = confessionNumberMatch ? confessionNumberMatch[0] : ''; // Match data is an array so we validate and take the first item if valid
   const clearedMessage = confessionNumberMatch ? message.split(confessionNumber)[1]  : message; // We also need to clear the message if the match is not null
+  // TODO: What if the post has 2 or more links?
+  const linkified_arr = linkify_it.match(clearedMessage);
+  const updated_arr = linkified_arr && linkified_arr.map((link_obj) => {
+    const splitted = clearedMessage.split(link_obj.raw);
+    const onPress = () =>
+      Linking.canOpenURL(link_obj.url)
+      .then(supported => supported && Linking.openURL(link_obj.url));
+
+    return (
+      <RowView>
+        <Text>{splitted[0]}<Text style={{color: 'blue'}} onPress={onPress}>{link_obj.url}</Text>{splitted[1]}</Text>
+      </RowView>
+    );
+  });
+
   return (
     <CardView>
       <TextContentView>
@@ -35,7 +51,14 @@ const ConfessionCard = ({
           <NumberText>{confessionNumber}</NumberText>
           <DateText>{moment(created_time).format('MMM D, HH:MM')}</DateText>
         </RowView>
-        <Text style={{fontFamily: 'Roboto'}}>{clearedMessage}</Text>
+        {
+          updated_arr ?
+          updated_arr[0] :
+          <Text>
+            {clearedMessage}
+          </Text>
+        }
+
       </TextContentView>
       { !full_picture ? null :
         <Image
