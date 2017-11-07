@@ -12,6 +12,7 @@
 		]
 	},
 	"dependencies": {
+		"linkify-it": "^2.0.3",
 		"lodash": "^4.17.4",
 		"moment": "^2.19.1",
 		"react": "16.0.0-beta.5",
