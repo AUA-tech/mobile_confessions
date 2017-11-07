@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Text, Animated } from 'react-native';
+import { Text, Animated, Keyboard } from 'react-native';
 import styled from 'styled-components/native';
 
 import Layout from '../components/layout';
@@ -51,37 +51,43 @@ export default class NewConfessionScreen extends PureComponent {
     const { confession } = this.state;
     return (
       <Layout headerTitle='Confess'>
-        <SendNotification
-          show_notification={ this.state.show_notification }
-          done={ () => this.setState({show_notification: false}) }
-          message={this.state.message}
-        />
-        <StyledTextInput
-          multiline
-          numberOfLines = {4}
-          onChangeText={this.onTextChange}
-          value={this.state.confession}
-          placeholder={'Confess yourself here'}
-          placeholderTextColor={colors.placeholderColor}
-        />
-        <AttachmentContainer>
-          <AttachmentText
+        <KeyboardDismisser activeOpacity={1} onPress={() => Keyboard.dismiss()}>
+          <SendNotification
+            show_notification={ this.state.show_notification }
+            done={ () => this.setState({show_notification: false}) }
+            message={this.state.message}
+          />
+          <StyledTextInput
             multiline
             numberOfLines = {4}
-            placeholder={'This will be changed later'}
+            onChangeText={this.onTextChange}
+            value={this.state.confession}
+            placeholder={'Confess yourself here'}
             placeholderTextColor={colors.placeholderColor}
           />
-          <AttachedFilesBox />
-        </AttachmentContainer>
-        <Button
-          disabled={!confession.trim()}
-          onPress={this.sendConfession}
-          title='Submit'
-        />
+          <AttachmentContainer>
+            <AttachmentText
+              multiline
+              numberOfLines = {4}
+              placeholder={'This will be changed later'}
+              placeholderTextColor={colors.placeholderColor}
+            />
+            <AttachedFilesBox />
+          </AttachmentContainer>
+          <Button
+            disabled={!confession.trim()}
+            onPress={this.sendConfession}
+            title='Submit'
+          />
+        </KeyboardDismisser>
       </Layout>
     );
   }
 }
+
+const KeyboardDismisser = styled.TouchableOpacity`
+  height: 100%;
+`
 
 const StyledTextInput = styled.TextInput`
   flex: 1;
