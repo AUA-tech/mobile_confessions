@@ -20,6 +20,7 @@
 		"react-native-actionsheet": "^2.3.0",
 		"react-native-fbsdk": "^0.6.3",
 		"react-native-modal": "^4.1.1",
+		"react-native-splash-screen": "3.0.1",
 		"react-navigation": "^1.0.0-beta.15",
 		"styled-components": "^2.2.2"
 	},
