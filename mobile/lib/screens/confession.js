@@ -67,6 +67,7 @@ export default class NewConfessionScreen extends PureComponent {
           />
           <AttachmentContainer>
             <AttachmentText
+              editable={false}
               multiline
               numberOfLines = {4}
               placeholder={'This will be changed later'}
