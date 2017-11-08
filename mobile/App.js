@@ -1,6 +1,7 @@
 import React from 'react';
 import { Platform, AsyncStorage } from 'react-native';
 import { TabNavigator } from 'react-navigation';
+import SplashScreen from 'react-native-splash-screen'
 
 import colors from './lib/constants/colors';
 import ConfessionsFeedScreen from './lib/screens/feed';
@@ -53,6 +54,7 @@ const options = Platform.select({
 
 const MyApp = TabNavigator(screens, options);
 MyApp.prototype.componentDidMount = function () {
+  SplashScreen.hide();
   AsyncStorage.getItem('hided_posts', (err, res) => {
     if(err) {
       console.warn('AsyncStorage error', err);
