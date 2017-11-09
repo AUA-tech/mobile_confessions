@@ -50,13 +50,14 @@ export default class SendNotification extends PureComponent {
 const NotificationText = styled.Text`
   color: white;
 `
-
+const NOTIFICATION_HEIGHT = 40;
+const NOTIFICATION_WIDTH = 170;
 const notificationStyle = {
   backgroundColor: 'black',
-  height: 50,
-  width: 200,
+  height: NOTIFICATION_HEIGHT,
+  width: NOTIFICATION_WIDTH,
   position: 'absolute',
-  left: (width / 2) - 100,
+  left: (width / 2) - (NOTIFICATION_WIDTH / 2),
   top: height / 4 - 25,
   zIndex: 9999,
   borderRadius: 10,
