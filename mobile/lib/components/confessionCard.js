@@ -1,11 +1,54 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import styled from 'styled-components/native';
 import { Text, Image, View, Dimensions, Alert, AsyncStorage, Linking } from 'react-native';
 import moment from 'moment';
 import linkify from 'linkify-it';
-const linkify_it = linkify();
+
 import colors from '../constants/colors';
+import { fetch_fb } from '../utils';
+
+const linkify_it = linkify();
 const {height, width} = Dimensions.get('window');
+
+
+class CommentCard extends PureComponent {
+  state = {
+    avatar: 'placeholder'
+  }
+  responseInfoCallback = (error, result) => {
+    if (error) {
+      console.warn(error);
+      return;
+    }
+    result && result.picture && result.picture.data &&
+    this.setState({ avatar: result.picture.data.url });
+  }
+  async componentWillMount () {
+    const {from} = this.props;
+    from && await fetch_fb(from.id, 'user', this.responseInfoCallback);
+  }
+  render() {
+    const {created_time, message, reactions, from} = this.props;
+    return (
+      <RowView style={{padding: 10}}>
+        <CommenterImage
+          source={{uri: this.state.avatar}}
+        />
+        <CommentMessageView>
+          <RowView>
+            <CommenterName>
+              {from.name}
+            </CommenterName>
+            <DateText>{moment(created_time).format('MMM D, HH:mm')}</DateText>
+          </RowView>
+          <Text>
+            {message}
+          </Text>
+        </CommentMessageView>
+      </RowView>
+    )
+  }
+}
 
 const ConfessionCard = ({
   id,
@@ -44,12 +87,20 @@ const ConfessionCard = ({
     );
   });
 
+  const comments_ui = !comments ? null : comments.data.map((comment) => {
+    return (
+      <View>
+        <CommentCard {...comment} />
+      </View>
+    )
+  })
+
   return (
     <CardView>
       <TextContentView>
         <RowView>
           <NumberText>{confessionNumber}</NumberText>
-          <DateText>{moment(created_time).format('MMM D, HH:MM')}</DateText>
+          <DateText>{moment(created_time).format('MMM D, HH:mm')}</DateText>
         </RowView>
         {
           updated_arr ?
@@ -75,10 +126,27 @@ const ConfessionCard = ({
           <Text>=></Text>
         </ActionView>
       </RowView>
+      {comments_ui}
     </CardView>
   );
 }
 
+const CommenterName = styled.Text`
+  color: ${colors.headerColor};
+  fontWeight: 700;
+  width: ${width * 0.5}
+`
+
+const CommentMessageView = styled.View`
+  paddingLeft: 10;
+  width: ${width - 70};
+`
+
+const CommenterImage = styled.Image`
+  width: 50;
+  height: 50;
+  border-radius: 25;
+`
 
 const NumberText = styled.Text`
   color: ${colors.headerColor};
@@ -89,7 +157,7 @@ const NumberText = styled.Text`
 const DateText = styled.Text`
   color: ${colors.softTextColor};
   font-weight: 300;
-  font-size: 16;
+  font-size: 13;
 `
 
 const RowView = styled.View`
