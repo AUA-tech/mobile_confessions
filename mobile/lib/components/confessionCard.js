@@ -78,7 +78,7 @@ class CommentCard extends PureComponent {
   render() {
     const {created_time, message, reactions, from, comments} = this.props;
     const commentReplies = comments && comments.data.map((comment) =>
-      <CommentReplyCard {...comment} />
+      <CommentReplyCard key={comment.id} {...comment} />
     )
     return (
       <View style={{padding: COMMENT_PADDING}}>
@@ -139,13 +139,9 @@ const ConfessionCard = ({
     );
   });
 
-  const comments_ui = !comments ? null : comments.data.map((comment) => {
-    return (
-      <View>
-        <CommentCard {...comment} />
-      </View>
-    )
-  })
+  const comments_ui = !comments ? null : comments.data.map((comment) =>
+    <CommentCard key={comment.id} {...comment} />
+  )
 
   return (
     <CardView>
