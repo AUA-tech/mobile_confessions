@@ -1,6 +1,7 @@
 import { differenceBy } from 'lodash';
 import { GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 import { accessToken } from './constants/token';
+import { Linking } from 'react-native';
 
 const serverAddress = 'https://zcljj54dwg.execute-api.us-east-1.amazonaws.com/dev/confessions';
 
@@ -9,6 +10,11 @@ const createRequestOptions = body => ({
   headers: new Headers({ 'Content-Type':'application/json'}),
   body: JSON.stringify(body)
 })
+
+export const linkTo = (link) => {
+  return Linking.canOpenURL(link)
+  .then(supported => supported && Linking.openURL(link));
+}
 
 export const fetch_next = async (pagingNext, confessionsList) => {
   try {
@@ -41,7 +47,7 @@ export const fetch_fb = (id, type, callback) => {
       opts.parameters.fields.string = 'id,message,link,created_time,attachments,picture,full_picture,reactions,comments{comments{reactions,message,created_time,from},message,reactions,created_time,from}';
       break;
     case 'user':
-      opts.parameters.fields.string = 'picture,name';
+      opts.parameters.fields.string = 'picture,name,link';
       break;
     // case 'comments':
     //   opts.parameters.fields.string = 'comments{comments{reactions,message,created_time,from},message,reactions,created_time,from}';

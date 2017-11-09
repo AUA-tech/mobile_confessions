@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react';
 import styled from 'styled-components/native';
-import { Text, Image, View, Dimensions, Alert, AsyncStorage, Linking } from 'react-native';
+import { Text, Image, View, Dimensions, Alert, AsyncStorage, Linking, TouchableWithoutFeedback } from 'react-native';
 import moment from 'moment';
 import linkify from 'linkify-it';
 
 import colors from '../constants/colors';
-import { fetch_fb } from '../utils';
+import { fetch_fb, linkTo } from '../utils';
 
 const linkify_it = linkify();
 const {height, width} = Dimensions.get('window');
@@ -13,7 +13,8 @@ const {height, width} = Dimensions.get('window');
 
 class CommentCard extends PureComponent {
   state = {
-    avatar: 'placeholder'
+    avatar: 'placeholder',
+    link: ''
   }
   responseInfoCallback = (error, result) => {
     if (error) {
@@ -21,7 +22,7 @@ class CommentCard extends PureComponent {
       return;
     }
     result && result.picture && result.picture.data &&
-    this.setState({ avatar: result.picture.data.url });
+    this.setState({ avatar: result.picture.data.url, link: result.link });
   }
   async componentWillMount () {
     const {from} = this.props;
@@ -31,12 +32,14 @@ class CommentCard extends PureComponent {
     const {created_time, message, reactions, from} = this.props;
     return (
       <RowView style={{padding: 10}}>
-        <CommenterImage
-          source={{uri: this.state.avatar}}
-        />
+        <TouchableWithoutFeedback onPress={() => linkTo(this.state.link)} >
+          <CommenterImage
+            source={{uri: this.state.avatar}}
+          />
+        </TouchableWithoutFeedback>
         <CommentMessageView>
           <RowView>
-            <CommenterName>
+            <CommenterName onPress={() => linkTo(this.state.link)}>
               {from.name}
             </CommenterName>
             <DateText>{moment(created_time).format('MMM D, HH:mm')}</DateText>
