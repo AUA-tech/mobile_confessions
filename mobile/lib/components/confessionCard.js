@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import styled from 'styled-components/native';
-import { Text, Image, View, Dimensions, Alert, AsyncStorage, Linking, TouchableWithoutFeedback } from 'react-native';
+import { Text, Image, View, Dimensions, Alert, AsyncStorage, TouchableWithoutFeedback } from 'react-native';
 import moment from 'moment';
 import linkify from 'linkify-it';
 
@@ -79,13 +79,9 @@ const ConfessionCard = ({
   const linkified_arr = linkify_it.match(clearedMessage);
   const updated_arr = linkified_arr && linkified_arr.map((link_obj) => {
     const splitted = clearedMessage.split(link_obj.raw);
-    const onPress = () =>
-      Linking.canOpenURL(link_obj.url)
-      .then(supported => supported && Linking.openURL(link_obj.url));
-
     return (
       <RowView>
-        <Text>{splitted[0]}<Text style={{color: 'blue'}} onPress={onPress}>{link_obj.url}</Text>{splitted[1]}</Text>
+        <Text>{splitted[0]}<Text style={{color: 'blue'}} onPress={() => linkTo(link_obj.url)}>{link_obj.url}</Text>{splitted[1]}</Text>
       </RowView>
     );
   });

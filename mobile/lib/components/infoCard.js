@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { Text, TouchableOpacity, Linking, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import moment from 'moment';
-
+import { linkTo } from '../utils';
 import colors from '../constants/colors';
 
 const InfoCard = ({
@@ -20,7 +20,7 @@ const InfoCard = ({
       <ColumnView>
         <RowView style={{width: '100%'}}>
           <AuthorName>{name}</AuthorName>
-          <View onPress={() => { Linking.openURL(link).catch(err => console.error('An error occurred', err)) }}>
+          <View onPress={() => linkTo(link) }>
               <Icon
                 source={require('../assets/info.png')}
               />

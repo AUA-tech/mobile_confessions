@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Keyboard, Text, TouchableOpacity, Linking } from 'react-native';
+import { Keyboard, Text, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
 import Modal from 'react-native-modal';
 
@@ -11,7 +11,7 @@ import SendNotification from '../components/sendNotification';
 import colors from '../constants/colors';
 import authors from '../constants/authors';
 import {height, width} from '../constants/styles';
-import { awsPost } from '../utils';
+import { awsPost, linkTo } from '../utils';
 
 export default class NewConfessionScreen extends PureComponent {
   static navigationOptions = {
@@ -66,10 +66,7 @@ export default class NewConfessionScreen extends PureComponent {
     const author_links = !selected_author ? null :
       ['facebook', 'linkedin', 'github', 'behance'].map((source) =>
         !selected_author[source] ? null :
-          <TouchableOpacity key={source} onPress={ () =>
-            Linking.openURL(selected_author[source])
-            .catch(err => console.warn('An error occurred', err))
-          }>
+          <TouchableOpacity key={source} onPress={ () => linkTo(selected_author[source]) }>
             <LogoImage source={{uri: source}} />
           </TouchableOpacity>
       )
