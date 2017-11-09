@@ -7,11 +7,16 @@ import linkify from 'linkify-it';
 import colors from '../constants/colors';
 import { fetch_fb, linkTo } from '../utils';
 
+const COMMENT_PADDING = 10;
+const COMMENTER_IMAGE = 40;
+const COMMENTER_REPLY_IMAGE = 25;
+const MESSAGE_LEFT_PADDING = 10;
+const REPLY_LEFT_PADDING = COMMENTER_IMAGE  + MESSAGE_LEFT_PADDING;
+
 const linkify_it = linkify();
 const {height, width} = Dimensions.get('window');
 
-
-class CommentCard extends PureComponent {
+class CommentReplyCard extends PureComponent {
   state = {
     avatar: 'placeholder',
     link: ''
@@ -31,24 +36,72 @@ class CommentCard extends PureComponent {
   render() {
     const {created_time, message, reactions, from} = this.props;
     return (
-      <RowView style={{padding: 10}}>
+      <RowView style={{padding: COMMENT_PADDING, paddingLeft: REPLY_LEFT_PADDING}}>
         <TouchableWithoutFeedback onPress={() => linkTo(this.state.link)} >
-          <CommenterImage
+          <CommenterReplyImage
             source={{uri: this.state.avatar}}
           />
         </TouchableWithoutFeedback>
-        <CommentMessageView>
+        <CommentReplyMessageView>
           <RowView>
-            <CommenterName onPress={() => linkTo(this.state.link)}>
+            <CommenterReplyName onPress={() => linkTo(this.state.link)}>
               {from.name}
-            </CommenterName>
+            </CommenterReplyName>
             <DateText>{moment(created_time).format('MMM D, HH:mm')}</DateText>
           </RowView>
           <Text>
             {message}
           </Text>
-        </CommentMessageView>
+        </CommentReplyMessageView>
       </RowView>
+    )
+  }
+}
+
+class CommentCard extends PureComponent {
+  state = {
+    avatar: 'placeholder',
+    link: ''
+  }
+  responseInfoCallback = (error, result) => {
+    if (error) {
+      console.warn(error);
+      return;
+    }
+    result && result.picture && result.picture.data &&
+    this.setState({ avatar: result.picture.data.url, link: result.link });
+  }
+  async componentWillMount () {
+    const {from} = this.props;
+    from && await fetch_fb(from.id, 'user', this.responseInfoCallback);
+  }
+  render() {
+    const {created_time, message, reactions, from, comments} = this.props;
+    const commentReplies = comments && comments.data.map((comment) =>
+      <CommentReplyCard {...comment} />
+    )
+    return (
+      <View style={{padding: COMMENT_PADDING}}>
+        <RowView>
+          <TouchableWithoutFeedback onPress={() => linkTo(this.state.link)} >
+            <CommenterImage
+              source={{uri: this.state.avatar}}
+            />
+          </TouchableWithoutFeedback>
+          <CommentMessageView>
+            <RowView>
+              <CommenterName onPress={() => linkTo(this.state.link)}>
+                {from.name}
+              </CommenterName>
+              <DateText>{moment(created_time).format('MMM D, HH:mm')}</DateText>
+            </RowView>
+            <Text>
+              {message}
+            </Text>
+          </CommentMessageView>
+        </RowView>
+        {commentReplies}
+      </View>
     )
   }
 }
@@ -130,6 +183,12 @@ const ConfessionCard = ({
   );
 }
 
+const CommenterImage = styled.Image`
+  width: ${COMMENTER_IMAGE};
+  height: ${COMMENTER_IMAGE};
+  border-radius: ${COMMENTER_IMAGE / 2};
+`
+
 const CommenterName = styled.Text`
   color: ${colors.headerColor};
   fontWeight: 700;
@@ -138,13 +197,24 @@ const CommenterName = styled.Text`
 
 const CommentMessageView = styled.View`
   paddingLeft: 10;
-  width: ${width - 70};
+  width: ${width - COMMENTER_IMAGE - 2 * COMMENT_PADDING};
 `
 
-const CommenterImage = styled.Image`
-  width: 50;
-  height: 50;
-  border-radius: 25;
+const CommenterReplyImage = styled.Image`
+  width: ${COMMENTER_REPLY_IMAGE};
+  height: ${COMMENTER_REPLY_IMAGE};
+  border-radius: ${COMMENTER_REPLY_IMAGE / 2};
+`
+
+const CommenterReplyName = styled.Text`
+  color: ${colors.headerColor};
+  fontWeight: 700;
+  width: ${width * 0.3}
+`
+
+const CommentReplyMessageView = styled.View`
+  paddingLeft: 10;
+  width: ${width - REPLY_LEFT_PADDING - COMMENTER_REPLY_IMAGE - 2 * COMMENT_PADDING};
 `
 
 const NumberText = styled.Text`
