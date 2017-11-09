@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import styled from 'styled-components/native';
-import { Text, Image, View, Dimensions, Alert, AsyncStorage, TouchableWithoutFeedback, Clipboard } from 'react-native';
+import { Text, Image, View, Dimensions, Alert, AsyncStorage, TouchableWithoutFeedback, Clipboard, TouchableOpacity } from 'react-native';
 import moment from 'moment';
 import linkify from 'linkify-it';
 
@@ -36,7 +36,7 @@ class CommentReplyCard extends PureComponent {
   render() {
     const {created_time, message, reactions, from} = this.props;
     return (
-      <RowView>
+      <RowView style={{padding: COMMENT_PADDING, paddingLeft: REPLY_LEFT_PADDING}}>
         <TouchableWithoutFeedback onPress={() => linkTo(this.state.link)} >
           <CommenterReplyImage
             source={{uri: this.state.avatar}}
@@ -61,7 +61,8 @@ class CommentReplyCard extends PureComponent {
 class CommentCard extends PureComponent {
   state = {
     avatar: 'placeholder',
-    link: ''
+    link: '',
+    seeMore: false
   }
   responseInfoCallback = (error, result) => {
     if (error) {
@@ -77,8 +78,11 @@ class CommentCard extends PureComponent {
   }
   render() {
     const {created_time, message, reactions, from, comments} = this.props;
-    const commentReplies = comments && comments.data.map((comment) =>
-      <CommentReplyCard key={comment.id} {...comment} />
+    const commentReplies = comments &&
+    (
+      this.state.seeMore ?
+      comments.data.map((comment) => <CommentReplyCard key={comment.id} {...comment} />) :
+      <CommentReplyCard key={comments.data[0].id} {...comments.data[0]} />
     )
     return (
       <View style={{padding: COMMENT_PADDING}}>
@@ -100,31 +104,50 @@ class CommentCard extends PureComponent {
             </Text>
           </CommentMessageView>
         </RowView>
+        {commentReplies}
+        {/* This is ugly af, need to find better solution*/}
         {
-          !commentReplies ? null :
-          <View style={{padding: COMMENT_PADDING, paddingLeft: REPLY_LEFT_PADDING}}>
-            {commentReplies}
-          </View>
+          commentReplies &&
+          comments.data.length > 1 &&
+          (
+            this.state.seeMore ?
+            <View style={{padding: COMMENT_PADDING, paddingLeft: REPLY_LEFT_PADDING}}>
+              <TouchableOpacity onPress={() => this.setState({seeMore: false})}>
+                <Text>See Less replies</Text>
+              </TouchableOpacity>
+            </View> :
+            <View style={{padding: COMMENT_PADDING, paddingLeft: REPLY_LEFT_PADDING}}>
+              <TouchableOpacity onPress={() => this.setState({seeMore: true})}>
+                <Text>See More replies</Text>
+              </TouchableOpacity>
+            </View>
+          )
         }
       </View>
     )
   }
 }
+class ConfessionCard extends PureComponent {
 
-const ConfessionCard = ({
-  id,
-  link,
-  message,
-  picture,
-  full_picture,
-  attachments,
-  created_time,
-  reactions,
-  comments,
-  open_action_sheet,
-  show_copied
-}) => {
-  // If image attachment exists, get it's ratio
+  state = {
+    seeMore: false
+  }
+
+  render() {
+    const {
+      id,
+      link,
+      message,
+      picture,
+      full_picture,
+      attachments,
+      created_time,
+      reactions,
+      comments,
+      open_action_sheet,
+      show_copied
+    } = this.props;
+      // If image attachment exists, get it's ratio
   const image_height = attachments ? attachments.data[0].media.image.height : undefined;
   const image_width = attachments ? attachments.data[0].media.image.width : undefined;
   const ratio = image_width / image_height;
@@ -145,47 +168,75 @@ const ConfessionCard = ({
     );
   });
 
-  const comments_ui = !comments ? null : comments.data.map((comment) =>
-    <CommentCard key={comment.id} {...comment} />
+  const comments_ui = comments &&
+  (
+    this.state.seeMore ?
+    comments.data.map((comment) => <CommentCard key={comment.id} {...comment} />) :
+    <CommentCard key={comments.data[0].id} {...comments.data[0]} />
   )
 
-  return (
-    <CardView>
-      <TextContentView>
-        <RowView>
-          <NumberText>{confessionNumber}</NumberText>
-          <DateText>{moment(created_time).format('MMM D, HH:mm')}</DateText>
-        </RowView>
-        {
-          updated_arr ?
-          updated_arr[0] :
-          <Text onLongPress={() => {
-            show_copied();
-            Clipboard.setString(message);
-          }}>
-            {clearedMessage}
-          </Text>
-        }
+  const commentReplies = comments &&
+  (
+    this.state.seeMore ?
+    comments.data.map((comment) => <CommentReplyCard key={comment.id} {...comment} />) :
+    <CommentReplyCard key={comments.data[0].id} {...comments.data[0]} />
+  )
+    return(
+      <CardView>
+        <TextContentView>
+          <RowView>
+            <NumberText>{confessionNumber}</NumberText>
+            <DateText>{moment(created_time).format('MMM D, HH:mm')}</DateText>
+          </RowView>
+          {
+            updated_arr ?
+            updated_arr[0] :
+            <Text onLongPress={() => {
+              show_copied();
+              Clipboard.setString(message);
+            }}>
+              {clearedMessage}
+            </Text>
+          }
 
-      </TextContentView>
-      { !full_picture ? null :
-        <Image
-          style={{width, height: width / ratio}}
-          source={{uri: attachments.data[0].media.image.src}}
-        />
-      }
-      <RowView style={{padding: 10}}>
-        <RowView>
-          <Text style={{paddingHorizontal: 5}}>{number_of_reactions} Likes</Text>
-          <Text style={{paddingHorizontal: 5}}>{number_of_comments} Comment</Text>
+        </TextContentView>
+        { !full_picture ? null :
+          <Image
+            style={{width, height: width / ratio}}
+            source={{uri: attachments.data[0].media.image.src}}
+          />
+        }
+        <RowView style={{padding: 10}}>
+          <RowView>
+            <Text style={{paddingHorizontal: 5}}>{number_of_reactions} Likes</Text>
+            <Text style={{paddingHorizontal: 5}}>{number_of_comments} Comment</Text>
+          </RowView>
+          <ActionView onPress={() => open_action_sheet(id)}>
+            <Text>=></Text>
+          </ActionView>
         </RowView>
-        <ActionView onPress={() => open_action_sheet(id)}>
-          <Text>=></Text>
-        </ActionView>
-      </RowView>
-      {comments_ui}
-    </CardView>
-  );
+        {comments_ui}
+        {/* This is ugly af, need to find better solution*/}
+        {
+          comments_ui &&
+          comments.data.length > 1 &&
+          (
+            this.state.seeMore ?
+            <View style={{padding: COMMENT_PADDING}}>
+              <TouchableOpacity onPress={() => this.setState({seeMore: false})}>
+                <Text>See Less comments</Text>
+              </TouchableOpacity>
+            </View> :
+            <View style={{padding: COMMENT_PADDING}}>
+              <TouchableOpacity onPress={() => this.setState({seeMore: true})}>
+                <Text>See More comments</Text>
+              </TouchableOpacity>
+            </View>
+          )
+        }
+      </CardView>
+    );
+  }
 }
 
 const CommenterImage = styled.Image`
