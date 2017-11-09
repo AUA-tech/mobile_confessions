@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import styled from 'styled-components/native';
-import { Text, Image, View, Dimensions, Alert, AsyncStorage, TouchableWithoutFeedback } from 'react-native';
+import { Text, Image, View, Dimensions, Alert, AsyncStorage, TouchableWithoutFeedback, Clipboard } from 'react-native';
 import moment from 'moment';
 import linkify from 'linkify-it';
 
@@ -121,7 +121,8 @@ const ConfessionCard = ({
   created_time,
   reactions,
   comments,
-  open_action_sheet
+  open_action_sheet,
+  show_copied
 }) => {
   // If image attachment exists, get it's ratio
   const image_height = attachments ? attachments.data[0].media.image.height : undefined;
@@ -158,7 +159,10 @@ const ConfessionCard = ({
         {
           updated_arr ?
           updated_arr[0] :
-          <Text>
+          <Text onLongPress={() => {
+            show_copied();
+            Clipboard.setString(message);
+          }}>
             {clearedMessage}
           </Text>
         }

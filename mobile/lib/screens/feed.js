@@ -8,6 +8,7 @@ import ActionSheet from 'react-native-actionsheet'
 import Layout from '../components/layout';
 import TabIcon from '../components/tabIcon';
 import ConfessionCard from '../components/confessionCard';
+import SendNotification from '../components/sendNotification';
 import colors from '../constants/colors';
 import {height, width} from '../constants/styles';
 import { awsGet, fetch_fb, fetch_next } from '../utils';
@@ -31,7 +32,8 @@ export default class ConfessionsFeedScreen extends PureComponent {
       fetchStatus: 1,
       hided_posts: [],
       modalVisible: false,
-      actionsheet_selected_id: ''
+      actionsheet_selected_id: '',
+      show_notification: false
     }
   }
   async componentDidMount(){
@@ -57,6 +59,7 @@ export default class ConfessionsFeedScreen extends PureComponent {
   createConfessionCards = ({ item: confession }) => (
     <ConfessionCard
       {...confession}
+      show_copied={() => this.setState({show_notification: true})}
       open_action_sheet={(id) => {
         this.setState({actionsheet_selected_id: id})
         this.ActionSheet.show()
@@ -140,6 +143,11 @@ export default class ConfessionsFeedScreen extends PureComponent {
             />
           </View>
         </Modal>
+        <SendNotification
+          show_notification={ this.state.show_notification }
+          done={ () => this.setState({ show_notification: false }) }
+          message="Confession Copied"
+        />
         <FlatList
           key='scrollView'
           data={filteredConfessionList}
