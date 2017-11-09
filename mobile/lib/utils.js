@@ -20,7 +20,7 @@ export const fetch_next = async (pagingNext, confessionsList) => {
   try {
     const promise = await fetch(pagingNext);
     const res = await promise.json();
-    const { data, paging } = result;
+    const { data, paging } = res;
     const newPostsList = differenceBy(data, confessionsList, 'id');
     const newList = [ ...confessionsList, ...newPostsList ];
     return {newList, newPaging: paging}; 
