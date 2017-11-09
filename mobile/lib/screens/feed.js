@@ -10,7 +10,7 @@ import TabIcon from '../components/tabIcon';
 import ConfessionCard from '../components/confessionCard';
 import colors from '../constants/colors';
 import {height, width} from '../constants/styles';
-import { awsGet } from '../utils';
+import { awsGet, fetch_fb, fetch_next } from '../utils';
 
 export default class ConfessionsFeedScreen extends PureComponent {
   static navigationOptions = {
@@ -28,7 +28,6 @@ export default class ConfessionsFeedScreen extends PureComponent {
     super();
     this.state = {
       confessionsList: [],
-      accessToken: '',
       fetchStatus: 1,
       hided_posts: [],
       modalVisible: false,
@@ -65,45 +64,21 @@ export default class ConfessionsFeedScreen extends PureComponent {
     />
   );
 
-  generateGraphRequest = accessToken => {
+  generateGraphRequest = () => {
     this.setState({ fetchStatus: 1 }); // loading
-    const infoRequest = new GraphRequest(
-      '/auaindulgence/feed',
-      {
-        parameters: {
-          access_token: {
-            string: accessToken
-          },
-          fields: {
-            string: 'id,message,link,created_time,attachments,picture,full_picture,reactions,comments',
-          }
-        }
-      },
-      this.responseInfoCallback,
-    );
-
-    new GraphRequestManager().addRequest(infoRequest).start();
+    fetch_fb('/auaindulgence/feed', 'posts', this.responseInfoCallback);
   }
 
-  fetchMore = async accessToken => {
+  fetchMore = async () => {
     const { paging, confessionsList } = this.state;
     this.setState({ fetchStatus: 1 }); // loading
-    try {
-      const promise = await fetch(paging.next);
-      const result = await promise.json();
-      const { data, paging: newPaging } = result;
-      const newPostsList = differenceBy(data, confessionsList, 'id');
-      const newList = [ ...confessionsList, ...newPostsList ];
-      this.setState({ confessionsList: newList, paging: newPaging, fetchStatus: 0 });
-    } catch (error) {
-      console.log(error);
-    }
+    const {newList, newPaging} = await fetch_next(paging.next, confessionsList);
+    this.setState({ confessionsList: newList, paging: newPaging, fetchStatus: 0 });
   }
 
-  async componentWillMount() {
+  componentWillMount() {
     try {
-      const { accessToken } = this.state;
-      this.generateGraphRequest(accessToken);
+      this.generateGraphRequest();
     } catch (error) {
       console.log(error);
     }
@@ -136,7 +111,7 @@ export default class ConfessionsFeedScreen extends PureComponent {
       }
     }
   render() {
-    const { confessionsList, accessToken, fetchStatus } = this.state;
+    const { confessionsList, fetchStatus } = this.state;
     const filteredConfessionList = confessionsList.filter((post) => {
       return !this.state.hided_posts.includes(post.id);
     })
@@ -172,9 +147,9 @@ export default class ConfessionsFeedScreen extends PureComponent {
           renderItem={ this.createConfessionCards }
           keyExtractor={item => item.id}
           refreshing={fetchStatus === 2}
-          onRefresh={() => this.generateGraphRequest(accessToken)}
+          onRefresh={() => this.generateGraphRequest()}
           onEndReachedThreshold={0.2}
-          onEndReached={() => this.fetchMore(accessToken)}
+          onEndReached={() => this.fetchMore()}
         />
         { fetchStatus !== 1 ? null :
           <ActivityIndicator />
