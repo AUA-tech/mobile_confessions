@@ -55,3 +55,6 @@ buck-out/
 
 # android secret json
 authenticate.json
+
+# fb page token
+token.js
