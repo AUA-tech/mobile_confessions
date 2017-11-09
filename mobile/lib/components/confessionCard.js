@@ -36,7 +36,7 @@ class CommentReplyCard extends PureComponent {
   render() {
     const {created_time, message, reactions, from} = this.props;
     return (
-      <RowView style={{padding: COMMENT_PADDING, paddingLeft: REPLY_LEFT_PADDING}}>
+      <RowView>
         <TouchableWithoutFeedback onPress={() => linkTo(this.state.link)} >
           <CommenterReplyImage
             source={{uri: this.state.avatar}}
@@ -100,7 +100,12 @@ class CommentCard extends PureComponent {
             </Text>
           </CommentMessageView>
         </RowView>
-        {commentReplies}
+        {
+          !commentReplies ? null :
+          <View style={{padding: COMMENT_PADDING, paddingLeft: REPLY_LEFT_PADDING}}>
+            {commentReplies}
+          </View>
+        }
       </View>
     )
   }
