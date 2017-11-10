@@ -13,7 +13,7 @@ import {
   REPLY_LEFT_PADDING
 } from '../constants/styles';
 import colors from '../constants/colors';
-import { fetch_fb, linkTo } from '../utils';
+import { fetch_fb, linkTo, linkifyMessage } from '../utils';
 
 class CommentReplyCard extends PureComponent {
   state = {
@@ -34,6 +34,9 @@ class CommentReplyCard extends PureComponent {
   }
   render() {
     const {created_time, message, reactions, from} = this.props;
+
+    const linkifiedMessage = linkifyMessage(message);
+
     return (
       <RowView style={{padding: COMMENT_PADDING, paddingLeft: REPLY_LEFT_PADDING}}>
         <TouchableWithoutFeedback onPress={() => linkTo(this.state.link)} >
@@ -49,7 +52,7 @@ class CommentReplyCard extends PureComponent {
             <DateText>{moment(created_time).format('MMM D, HH:mm')}</DateText>
           </RowView>
           <Text>
-            {message}
+            {linkifiedMessage}
           </Text>
         </CommentReplyMessageView>
       </RowView>

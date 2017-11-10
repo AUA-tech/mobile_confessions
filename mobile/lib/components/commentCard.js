@@ -14,7 +14,7 @@ import {
   MESSAGE_LEFT_PADDING,
   REPLY_LEFT_PADDING
 } from '../constants/styles';
-import { fetch_fb, linkTo } from '../utils';
+import { fetch_fb, linkTo, linkifyMessage } from '../utils';
 
 class CommentCard extends PureComponent {
   state = {
@@ -36,6 +36,9 @@ class CommentCard extends PureComponent {
   }
   render() {
     const {created_time, message, reactions, from, comments} = this.props;
+
+    const linkifiedMessage = linkifyMessage(message);
+
     const commentReplies = comments &&
     (
       this.state.seeMore ?
@@ -58,7 +61,7 @@ class CommentCard extends PureComponent {
               <DateText>{moment(created_time).format('MMM D, HH:mm')}</DateText>
             </RowView>
             <Text>
-              {message}
+              {linkifiedMessage}
             </Text>
           </CommentMessageView>
         </RowView>
