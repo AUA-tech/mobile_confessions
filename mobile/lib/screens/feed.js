@@ -3,7 +3,8 @@ import { FlatList, AsyncStorage, ActivityIndicator, View, Text, TextInput, Alert
 import { differenceBy } from 'lodash';
 import { GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 import Modal from 'react-native-modal';
-import ActionSheet from 'react-native-actionsheet'
+import ActionSheet from 'react-native-actionsheet';
+import { NavigationActions } from 'react-navigation'
 
 import Layout from '../components/layout';
 import TabIcon from '../components/tabIcon';
@@ -14,7 +15,7 @@ import {height, width} from '../constants/styles';
 import { awsGet, fetch_fb, fetch_next } from '../utils';
 
 export default class ConfessionsFeedScreen extends PureComponent {
-  static navigationOptions = {
+  static navigationOptions = ({ navigation }) => ({
     tabBarLabel: 'Feed',
     // Note: By default the icon is only shown on iOS. Search the showIcon option below.
     tabBarIcon: ({ tintColor }) => (
@@ -23,7 +24,18 @@ export default class ConfessionsFeedScreen extends PureComponent {
         tintColor={tintColor}
       />
     ),
-  };
+tabBarOnPress: ({ focused }, jumpToIndex) => {
+  if (focused) {
+    const paramsAction = NavigationActions.navigate({
+      routeName: 'Home',
+      params: { refresh: true }
+    });
+    navigation.dispatch(paramsAction);
+  } else {
+    jumpToIndex(0);
+  }
+}
+  });
 
   constructor() {
     super();
@@ -36,7 +48,8 @@ export default class ConfessionsFeedScreen extends PureComponent {
       show_notification: false
     }
   }
-  async componentDidMount(){
+
+  async componentDidMount() {
     const hided_posts_str = await AsyncStorage.getItem('hided_posts');
     const hided_posts = JSON.parse(hided_posts_str);
     this.setState({hided_posts: hided_posts ? hided_posts : []});
@@ -86,7 +99,8 @@ export default class ConfessionsFeedScreen extends PureComponent {
       console.log(error);
     }
   }
-  handle_action_sheet (index) {
+
+  handle_action_sheet(index) {
       switch (index) {
         case 0:
           console.warn('Close ActionSheet');
@@ -113,6 +127,7 @@ export default class ConfessionsFeedScreen extends PureComponent {
           break;
       }
     }
+
   render() {
     const { confessionsList, fetchStatus } = this.state;
     const filteredConfessionList = confessionsList.filter((post) => {
