@@ -58,3 +58,10 @@ authenticate.json
 
 # fb page token
 token.js
+
+# Google cloud service json
+GoogleService-Info.plist
+google-services.json
+
+# Cocoapods
+Pods
