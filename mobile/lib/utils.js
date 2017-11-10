@@ -1,7 +1,11 @@
+import React from 'react';
+import { Text } from 'react-native';
 import { differenceBy } from 'lodash';
 import { GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 import { accessToken } from './constants/token';
 import { Linking } from 'react-native';
+import linkify from 'linkify-it';
+const linkify_it = linkify().set({ fuzzyLink: false });
 
 const serverAddress = 'https://zcljj54dwg.execute-api.us-east-1.amazonaws.com/dev/confessions';
 
@@ -70,3 +74,24 @@ export const awsPost = (apiFunction, body) =>
   fetch(`${serverAddress}/${apiFunction}`, createRequestOptions(body))
 
 export const awsGet = apiFunction => fetch(`${serverAddress}/${apiFunction}`);
+
+export const linkifyMessage = (message) => {
+
+  const link_arr = linkify_it.match(message);
+  if (!link_arr) return message;
+
+  const aux = (mes, i, acc) => {
+    if(!link_arr[i]) return acc;
+    const splitted = mes.split(link_arr[i].raw);
+    acc.push(
+      <Text key={splitted[0]}>
+        {splitted[0]}
+        <Text style={{color: 'blue'}} onPress={() => linkTo(link_arr[i].raw)}>
+          {link_arr[i].raw}
+        </Text>
+      </Text>
+    );
+    return aux(splitted[1], i + 1, acc)
+  }
+  return aux (message, 0, []);
+}

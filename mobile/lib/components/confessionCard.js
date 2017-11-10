@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import styled from 'styled-components/native';
 import { Text, Image, View, Clipboard, TouchableOpacity } from 'react-native';
 import moment from 'moment';
-import linkify from 'linkify-it';
 
 import CommentCard from './commentCard';
 import {
@@ -15,9 +14,7 @@ import {
   REPLY_LEFT_PADDING
 } from '../constants/styles';
 import colors from '../constants/colors';
-import { linkTo } from '../utils';
-
-const linkify_it = linkify();
+import { linkTo, linkifyMessage } from '../utils';
 
 class ConfessionCard extends PureComponent {
 
@@ -49,25 +46,13 @@ class ConfessionCard extends PureComponent {
     const confessionNumberMatch = message.match(/#([0-9]+)\d/); // Match a regexp for extracting confession number
     const confessionNumber = confessionNumberMatch ? confessionNumberMatch[0] : ''; // Match data is an array so we validate and take the first item if valid
     const clearedMessage = confessionNumberMatch ? message.split(confessionNumber)[1]  : message; // We also need to clear the message if the match is not null
-    // TODO: What if the post has 2 or more links?
-    const linkified_arr = linkify_it.match(clearedMessage);
+
     const copyOnLongPress = () => {
       show_copied();
       Clipboard.setString(message);
     }
-    const updated_arr = linkified_arr && linkified_arr.map((link_obj) => {
-      const splitted = clearedMessage.split(link_obj.raw);
-      return (
-        <RowView>
-          <Text onLongPress={copyOnLongPress}>
-            {splitted[0]}
-            <Text style={{color: 'blue'}} onPress={() => linkTo(link_obj.url)}>
-              {link_obj.url}
-            </Text>{splitted[1]}
-          </Text>
-        </RowView>
-      );
-    });
+
+    const linkifiedMessage = linkifyMessage(clearedMessage);
 
     const comments_ui = comments &&
     (
@@ -83,14 +68,9 @@ class ConfessionCard extends PureComponent {
             <NumberText>{confessionNumber}</NumberText>
             <DateText>{moment(created_time).format('MMM D, HH:mm')}</DateText>
           </RowView>
-          {
-            updated_arr ?
-            updated_arr[0] :
-            <Text onLongPress={copyOnLongPress}>
-              {clearedMessage}
-            </Text>
-          }
-
+          <Text onLongPress={copyOnLongPress}>
+            {linkifiedMessage}
+          </Text>
         </TextContentView>
         { !full_picture ? null :
           <Image
