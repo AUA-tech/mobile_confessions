@@ -51,11 +51,20 @@ class ConfessionCard extends PureComponent {
     const clearedMessage = confessionNumberMatch ? message.split(confessionNumber)[1]  : message; // We also need to clear the message if the match is not null
     // TODO: What if the post has 2 or more links?
     const linkified_arr = linkify_it.match(clearedMessage);
+    const copyOnLongPress = () => {
+      show_copied();
+      Clipboard.setString(message);
+    }
     const updated_arr = linkified_arr && linkified_arr.map((link_obj) => {
       const splitted = clearedMessage.split(link_obj.raw);
       return (
         <RowView>
-          <Text>{splitted[0]}<Text style={{color: 'blue'}} onPress={() => linkTo(link_obj.url)}>{link_obj.url}</Text>{splitted[1]}</Text>
+          <Text onLongPress={copyOnLongPress}>
+            {splitted[0]}
+            <Text style={{color: 'blue'}} onPress={() => linkTo(link_obj.url)}>
+              {link_obj.url}
+            </Text>{splitted[1]}
+          </Text>
         </RowView>
       );
     });
@@ -77,10 +86,7 @@ class ConfessionCard extends PureComponent {
           {
             updated_arr ?
             updated_arr[0] :
-            <Text onLongPress={() => {
-              show_copied();
-              Clipboard.setString(message);
-            }}>
+            <Text onLongPress={copyOnLongPress}>
               {clearedMessage}
             </Text>
           }
