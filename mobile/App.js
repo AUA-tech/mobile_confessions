@@ -96,7 +96,9 @@ MyApp.prototype.componentWillUnmount = function() {
 MyApp.prototype.componentDidMount = function () {
   
   FCM.requestPermissions().then(()=>console.log('granted')).catch(()=>console.log('notification permission rejected'));
-  
+
+  FCM.subscribeToTopic('/topics/confessions');
+
   FCM.getFCMToken().then(token => {
       console.log(token)
       // store fcm token in your server
