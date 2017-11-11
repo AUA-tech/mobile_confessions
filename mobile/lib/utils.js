@@ -20,7 +20,7 @@ export const linkTo = (link) => {
   .then(supported => supported && Linking.openURL(link));
 }
 
-export const fetch_next = async (pagingNext, confessionsList) => {
+export const fetchNext = async (pagingNext, confessionsList) => {
   try {
     const promise = await fetch(pagingNext);
     const res = await promise.json();
@@ -33,7 +33,7 @@ export const fetch_next = async (pagingNext, confessionsList) => {
   }
 }
 
-export const fetch_fb = (id, type, callback) => {
+export const fetchFb = (id, type, callback) => {
 
   const opts = {
     parameters: {

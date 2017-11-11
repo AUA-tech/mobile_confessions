@@ -13,7 +13,7 @@ import {
   REPLY_LEFT_PADDING
 } from '../constants/styles';
 import colors from '../constants/colors';
-import { fetch_fb, linkTo, linkifyMessage } from '../utils';
+import { fetchFb, linkTo, linkifyMessage } from '../utils';
 
 class CommentReplyCard extends PureComponent {
   state = {
@@ -30,7 +30,7 @@ class CommentReplyCard extends PureComponent {
   }
   async componentWillMount () {
     const {from} = this.props;
-    from && await fetch_fb(from.id, 'user', this.responseInfoCallback);
+    from && await fetchFb(from.id, 'user', this.responseInfoCallback);
   }
   render() {
     const {created_time, message, reactions, from} = this.props;
