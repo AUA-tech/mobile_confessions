@@ -1,2 +1,5 @@
 env.yml
 node_modules/
+
+# FCM secret json
+service-account.json
