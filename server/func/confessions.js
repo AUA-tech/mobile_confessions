@@ -4,6 +4,14 @@ const uuid = require('uuid');
 const FB = require('fb');
 const SES = new AWS.SES();
 
+// Implement Firebase Cloud Messaging
+const admin = require("firebase-admin");
+const serviceAccount = require("../service-account.json");
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "https://aua-confessions.firebaseio.com"
+});
+
 module.exports.send_confession = (event, context, callback) => {
     console.log(event.body);
     const data = JSON.parse(event.body);
@@ -51,6 +59,57 @@ module.exports.send_feedback = (event, context, callback) => {
         })
     }
 };
+
+module.exports.sendNotification = (event, context, callback) => {
+    if(event.queryStringParameters){
+        const queryParams = event.queryStringParameters;
+    
+        const rVerifyToken = queryParams['hub.verify_token']
+    
+        if (rVerifyToken === process.env.FB_WEBHOOK_VERIFY_TOKEN) {
+            const challenge = queryParams['hub.challenge']
+            
+            const response = {
+                'body': parseInt(challenge),
+                'statusCode': 200
+            };
+            
+            callback(null, response);
+        } else {
+            const response = {
+                'body': 'Error, wrong validation token',
+                'statusCode': 422
+            };
+            
+            callback(null, response);
+        }
+    } else {
+        const data = JSON.parse(event.body);
+        const message = data.entry[0].changes[0].value.message;
+        
+        const confessionNumberMatch = message.match(/#([0-9]+)\d/); // Match a regexp for extracting confession number
+        const confessionNumber = confessionNumberMatch ? confessionNumberMatch[0] : ''; // Match data is an array so we validate and take the first item if valid
+        const clearedMessage = confessionNumberMatch ? message.split(confessionNumber)[1]  : message; // We also need to clear the message if the match is not null
+
+        admin.messaging().sendToTopic(
+        '/topics/confessions',
+        {
+            "notification" : {
+                "title" : confessionNumber,
+                "body"  : clearedMessage,
+                "sound" : "default"
+            }
+        },
+        {
+            "contentAvailable": true
+        }
+        ).then((r) => {
+            context_succeed(context, {
+                message: 'Success'
+            })
+        })
+    }
+}
 
 function post_confession (context, confession) {
 

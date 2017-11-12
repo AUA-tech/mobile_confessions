@@ -13,6 +13,7 @@ provider:
     SUPPORT_EMAIL: ${file(./env.yml):SUPPORT_EMAIL}
     ADMIN_EMAIL: ${file(./env.yml):ADMIN_EMAIL}
     FB_PAGE_TOKEN: ${file(./env.yml):FB_PAGE_TOKEN}
+    FB_WEBHOOK_VERIFY_TOKEN: ${file(./env.yml):FB_WEBHOOK_VERIFY_TOKEN}
 
   iamRoleStatements:
     - Effect: Allow
@@ -35,3 +36,10 @@ functions:
       - http:
           path: confessions/send_feedback
           method: post
+
+  sendNotification:
+    handler: func/confessions.sendNotification
+    events:
+      - http:
+          path: confessions/sendNotification
+          method: post # change to get when you verify the webhook
