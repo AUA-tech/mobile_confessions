@@ -13,14 +13,19 @@ admin.initializeApp({
 });
 
 module.exports.send_confession = (event, context, callback) => {
-    console.log(event.body);
     const data = JSON.parse(event.body);
     if(data) {
-        const {confession} = data;
+        const { confession, publish_now, when_to_publish } = data;
+        const options = {
+            context,
+            confession,
+            publish_now,
+            when_to_publish
+        }
         // TODO: run AI and get the function output in is_valid_confession
         const is_valid_confession = true;
         if(is_valid_confession) {
-            post_confession(context, confession);
+            post_confession(options);
         } else {
             send_email({
                 to_email: process.env.ADMIN_EMAIL,
@@ -86,47 +91,81 @@ module.exports.sendNotification = (event, context, callback) => {
     } else {
         const data = JSON.parse(event.body);
         const message = data.entry[0].changes[0].value.message;
-        
-        const confessionNumberMatch = message.match(/#([0-9]+)\d/); // Match a regexp for extracting confession number
-        const confessionNumber = confessionNumberMatch ? confessionNumberMatch[0] : ''; // Match data is an array so we validate and take the first item if valid
-        const clearedMessage = confessionNumberMatch ? message.split(confessionNumber)[1]  : message; // We also need to clear the message if the match is not null
+        const is_published = data.entry[0].changes[0].value.published;
+        if(is_published) {
+            const confessionNumberMatch = message.match(/#([0-9]+)\d/); // Match a regexp for extracting confession number
+            const confessionNumber = confessionNumberMatch ? confessionNumberMatch[0] : ''; // Match data is an array so we validate and take the first item if valid
+            const clearedMessage = confessionNumberMatch ? message.split(confessionNumber)[1]  : message; // We also need to clear the message if the match is not null
 
-        admin.messaging().sendToTopic(
-        '/topics/confessions',
-        {
-            "notification" : {
-                "title" : confessionNumber,
-                "body"  : clearedMessage,
-                "sound" : "default"
+            admin.messaging().sendToTopic(
+            '/topics/confessions',
+            {
+                "notification" : {
+                    "title" : confessionNumber,
+                    "body"  : clearedMessage,
+                    "sound" : "default"
+                }
+            },
+            {
+                "contentAvailable": true
             }
-        },
-        {
-            "contentAvailable": true
-        }
-        ).then((r) => {
-            context_succeed(context, {
-                message: 'Success'
+            ).then((r) => {
+                context_succeed(context, {
+                    message: 'Success'
+                })
             })
-        })
+        } else {
+            context_succeed(context, {
+                message: 'Failure'
+            })
+        }
     }
 }
 
-function post_confession (context, confession) {
+function post_confession (options) {
+
+    const {
+        context,
+        confession,
+        publish_now,
+        when_to_publish
+    } = options;
 
     FB.setAccessToken(process.env.FB_PAGE_TOKEN);
 
-    FB.api('me/feed', 'POST', { message: confession }, res => {
-        if(!res || res.error) {
-          console.log(!res ? 'error occurred' : res.error);
-          return;
-        } else {
-            console.log('Post Id: ' + res.id);
-        }
-        context_succeed(context, {
-            message: 'Success',
-            confession
-        })
-    });
+    if (publish_now) {
+        FB.api('me/feed', 'POST', {
+            message: confession
+        }, res => {
+            if(!res || res.error) {
+                console.log(!res ? 'error occurred' : res.error);
+                return;
+            } else {
+                console.log('Post Id: ' + res.id);
+            }
+            context_succeed(context, {
+                message: 'Success',
+                confession
+            })
+        });
+    } else {
+        FB.api('me/feed', 'POST', {
+            message: confession,
+            scheduled_publish_time: Math.round(+when_to_publish / 1000),
+            published: false,
+        }, res => {
+            if(!res || res.error) {
+              console.log(!res ? 'error occurred' : res.error);
+              return;
+            } else {
+                console.log('Post Id: ' + res.id);
+            }
+            context_succeed(context, {
+                message: 'Success',
+                confession
+            })
+        });
+    }
 }
 
 function post_comment (context, postID, comment) {
