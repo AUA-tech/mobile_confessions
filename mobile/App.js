@@ -125,6 +125,15 @@ MyApp.prototype.componentDidMount = function () {
     if(res === null)
       AsyncStorage.setItem('hided_posts', JSON.stringify([]));
   })
+  AsyncStorage.getItem('cachedPosts', (err, res) => {
+    console.warn(res);
+    if(err) {
+      console.warn('AsyncStorage error', err);
+      return;
+    }
+    if(res === null)
+      AsyncStorage.setItem('cachedPosts', JSON.stringify([]));
+  })
 }
 
 export default MyApp;

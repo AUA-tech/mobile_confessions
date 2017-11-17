@@ -64,16 +64,23 @@ export default class ConfessionsFeedScreen extends PureComponent {
 
 	responseInfoCallback = (error, result) => {
 		if (error) {
+			AsyncStorage.getItem('cachedPosts')
+			.then((cachedPostsJson) => {
+				const cachedPosts = JSON.parse(cachedPostsJson) || [];
+				this.setState({ fetchStatus: 0, confessionsList: cachedPosts });
+			})
 			console.log('Error fetching data: ', error);
 			// May later change to 4, which will mean error: not needed yet
-			this.setState({ fetchStatus: 0 });
 		} else {
 			const { confessionsList } = this.state;
 			const { data, paging } = result;
 			const newPostsList = differenceBy(data, confessionsList, 'id');
 			const newList = [ ...newPostsList, ...confessionsList ];
 			// status 0 means nothing to load
-			this.setState({ confessionsList: newList, paging, fetchStatus: 0 });
+			this.setState({ confessionsList: newList, paging, fetchStatus: 0 }, () => {
+				const updatedCachedPosts = JSON.stringify(newList.slice(0, 25));
+				AsyncStorage.setItem('cachedPosts', updatedCachedPosts);
+			});
 		}
 	}
 
