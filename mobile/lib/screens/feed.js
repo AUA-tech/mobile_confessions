@@ -80,6 +80,7 @@ export default class ConfessionsFeedScreen extends PureComponent {
 	createConfessionCards = ({ item: confession }) => (
 		<ConfessionCard
 			{...confession}
+			isHidden={this.state.hiddenPosts.includes(confession.id)}
 			show_copied={() => this.setState({ shouldShowNotification: true })}
 			open_action_sheet={(id) => {
 				this.setState({ actionSheetSelectedId: id });
@@ -101,18 +102,25 @@ export default class ConfessionsFeedScreen extends PureComponent {
 	}
 
 	handleActionSheet(index) {
+		const { hiddenPosts: statePosts, actionSheetSelectedId } = this.state;
+		const isHidden = statePosts.includes(actionSheetSelectedId);
+		const alertMessage = isHidden ? 'Unhide this post?' : 'Hide this post?';
 		switch (index) {
 		case 0:
 			console.warn('Close ActionSheet');
 			break;
 		case 1:
-			Alert.alert('Hide this post?', '', [
+			Alert.alert( alertMessage, '', [
 				{ text: 'No', onPress: null, style: 'cancel' },
 				{
 					text: 'Yes',
 					onPress: async () => {
-						const { hiddenPosts: statePosts, actionSheetSelectedId } = this.state;
-						const hiddenPosts = [ ...statePosts, actionSheetSelectedId ];
+						let hiddenPosts = [];
+						if(isHidden) {
+							hiddenPosts = statePosts.filter((id) => id !== actionSheetSelectedId);
+						} else {
+							hiddenPosts = [ ...statePosts, actionSheetSelectedId ];
+						}
 						this.setState({ hiddenPosts }, () => {
 							const updatedhiddenPostJson = JSON.stringify(hiddenPosts);
 							AsyncStorage.setItem('hiddenPosts', updatedhiddenPostJson);
@@ -139,7 +147,11 @@ export default class ConfessionsFeedScreen extends PureComponent {
 			actionSheetSelectedId,
 			shouldShowNotification,
 		} = this.state;
-		const filteredConfessionList = confessionsList.filter(post => !hiddenPosts.includes(post.id));
+		const actionSheetButtonArray = [
+			'Cancel',
+			hiddenPosts.includes(actionSheetSelectedId) ? 'Unhide' : 'Hide',
+			'Report'
+		];
 		return (
 			<Layout headerTitle="Feed">
 				<Modal
@@ -174,7 +186,7 @@ export default class ConfessionsFeedScreen extends PureComponent {
 				/>
 				<FlatList
 					key="scrollView"
-					data={filteredConfessionList}
+					data={confessionsList}
 					style={{ backgroundColor: colors.bgColor }}
 					renderItem={this.createConfessionCards}
 					keyExtractor={item => item.id}
@@ -188,10 +200,10 @@ export default class ConfessionsFeedScreen extends PureComponent {
 				}
 				<ActionSheet
 					ref={(o) => { this.ActionSheet = o; }}
-					options={[ 'Cancel', 'Hide', 'Report' ]}
+					options={actionSheetButtonArray}
 					cancelButtonIndex={0}
 					destructiveButtonIndex={2}
-					onPress={this.handleActionSheet}
+					onPress={(i) => this.handleActionSheet(i)}
 				/>
 			</Layout>
 		);

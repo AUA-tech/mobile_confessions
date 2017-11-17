@@ -34,7 +34,8 @@ class ConfessionCard extends PureComponent {
       reactions,
       comments,
       open_action_sheet,
-      show_copied
+      show_copied,
+      isHidden
     } = this.props;
       // If image attachment exists, get it's ratio
     const image_height = attachments ? attachments.data[0].media.image.height : undefined;
@@ -60,54 +61,70 @@ class ConfessionCard extends PureComponent {
       comments.data.map((comment) => <CommentCard key={comment.id} {...comment} />) :
       <CommentCard key={comments.data[0].id} {...comments.data[0]} />
     )
-
-    return(
-      <CardView>
-        <TextContentView>
-          <RowView>
-            <NumberText>{confessionNumber}</NumberText>
-            <DateText>{moment(created_time).format('MMM D, HH:mm')}</DateText>
+    let content = null;
+    if(isHidden)
+      content = (
+        <CardView>
+          <TextContentView>
+            <RowView>
+              <NumberText>{confessionNumber}</NumberText>
+              {/* <DateText>{moment(created_time).format('MMM D, HH:mm')}</DateText> */}
+              <ActionView onPress={() => open_action_sheet(id)}>
+                <Text>=></Text>
+              </ActionView>
+            </RowView>
+          </TextContentView>
+        </CardView>
+      )
+    else
+      content = (
+        <CardView>
+          <TextContentView>
+            <RowView>
+              <NumberText>{confessionNumber}</NumberText>
+              <DateText>{moment(created_time).format('MMM D, HH:mm')}</DateText>
+            </RowView>
+            <Text onLongPress={copyOnLongPress}>
+              {linkifiedMessage}
+            </Text>
+          </TextContentView>
+          { !full_picture ? null :
+            <Image
+              style={{width, height: width / ratio}}
+              source={{uri: attachments.data[0].media.image.src}}
+            />
+          }
+          <RowView style={{padding: 10}}>
+            <RowView>
+              <Text style={{paddingHorizontal: 5}}>{number_of_reactions} Likes</Text>
+              <Text style={{paddingHorizontal: 5}}>{number_of_comments} Comment</Text>
+            </RowView>
+            <ActionView onPress={() => open_action_sheet(id)}>
+              <Text>=></Text>
+            </ActionView>
           </RowView>
-          <Text onLongPress={copyOnLongPress}>
-            {linkifiedMessage}
-          </Text>
-        </TextContentView>
-        { !full_picture ? null :
-          <Image
-            style={{width, height: width / ratio}}
-            source={{uri: attachments.data[0].media.image.src}}
-          />
-        }
-        <RowView style={{padding: 10}}>
-          <RowView>
-            <Text style={{paddingHorizontal: 5}}>{number_of_reactions} Likes</Text>
-            <Text style={{paddingHorizontal: 5}}>{number_of_comments} Comment</Text>
-          </RowView>
-          <ActionView onPress={() => open_action_sheet(id)}>
-            <Text>=></Text>
-          </ActionView>
-        </RowView>
-        {comments_ui}
-        {/* This is ugly af, need to find better solution*/}
-        {
-          comments_ui &&
-          comments.data.length > 1 &&
-          (
-            this.state.seeMore ?
-            <View style={{padding: COMMENT_PADDING}}>
-              <TouchableOpacity onPress={() => this.setState({seeMore: false})}>
-                <Text>See Less comments</Text>
-              </TouchableOpacity>
-            </View> :
-            <View style={{padding: COMMENT_PADDING}}>
-              <TouchableOpacity onPress={() => this.setState({seeMore: true})}>
-                <Text>See More comments</Text>
-              </TouchableOpacity>
-            </View>
-          )
-        }
-      </CardView>
-    );
+          {comments_ui}
+          {/* This is ugly af, need to find better solution*/}
+          {
+            comments_ui &&
+            comments.data.length > 1 &&
+            (
+              this.state.seeMore ?
+              <View style={{padding: COMMENT_PADDING}}>
+                <TouchableOpacity onPress={() => this.setState({seeMore: false})}>
+                  <Text>See Less comments</Text>
+                </TouchableOpacity>
+              </View> :
+              <View style={{padding: COMMENT_PADDING}}>
+                <TouchableOpacity onPress={() => this.setState({seeMore: true})}>
+                  <Text>See More comments</Text>
+                </TouchableOpacity>
+              </View>
+            )
+          }
+        </CardView>
+      );
+    return content;
   }
 }
 
@@ -140,6 +157,7 @@ const CardView = styled.View`
 
 const ActionView = styled.TouchableOpacity`
   align-items: center;
+  justify-content: center;
   width: 30;
 `
 
