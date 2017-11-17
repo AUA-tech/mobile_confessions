@@ -7,8 +7,8 @@ import colors from '../constants/colors';
 class Header extends PureComponent {
 
   state = {
-    is_connected: false,
-    which_connection: 'none'
+    is_connected: true,
+    which_connection: 'wifi'
   }
 
   componentDidMount() {
