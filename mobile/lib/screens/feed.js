@@ -4,6 +4,7 @@ import { differenceBy } from 'lodash';
 import Modal from 'react-native-modal';
 import ActionSheet from 'react-native-actionsheet';
 import { NavigationActions } from 'react-navigation';
+import styled from 'styled-components/native';
 
 import Layout from '../components/layout';
 import TabIcon from '../components/tabIcon';
@@ -11,7 +12,7 @@ import ConfessionCard from '../components/confessionCard';
 import SendNotification from '../components/sendNotification';
 import colors from '../constants/colors';
 import { width } from '../constants/styles';
-import { fetchFb, fetchNext } from '../utils';
+import { fetchFb, fetchNext, awsPost } from '../utils';
 
 export default class ConfessionsFeedScreen extends PureComponent {
 	static navigationOptions = ({ navigation }) => ({
@@ -44,7 +45,8 @@ export default class ConfessionsFeedScreen extends PureComponent {
 			hiddenPosts: [],
 			modalVisible: false,
 			actionSheetSelectedId: '',
-			shouldShowNotification: false,
+			show_notification: false,
+			reportText: ''
 		};
 	}
 
@@ -88,7 +90,7 @@ export default class ConfessionsFeedScreen extends PureComponent {
 		<ConfessionCard
 			{...confession}
 			isHidden={this.state.hiddenPosts.includes(confession.id)}
-			show_copied={() => this.setState({ shouldShowNotification: true })}
+			show_copied={() => this.setState({ show_notification: true, notificationMessage: "Confession Copied" })}
 			open_action_sheet={(id) => {
 				this.setState({ actionSheetSelectedId: id });
 				this.ActionSheet.show();
@@ -144,6 +146,36 @@ export default class ConfessionsFeedScreen extends PureComponent {
 		}
 	}
 
+	async submitReport() {
+		const { reportText, actionSheetSelectedId, confessionsList } = this.state;
+		if(reportText.trim()){
+
+			const actionSheetSelectedObj = confessionsList.filter((conf) => conf.id === actionSheetSelectedId)[0];
+			const actionSheetSelectedMsg = actionSheetSelectedObj && actionSheetSelectedObj.message;
+
+			const feedback = `REPORT: ${reportText} Message: ${actionSheetSelectedMsg}`;
+			const fetched_res = await awsPost('send_feedback', { feedback });
+			const res = await fetched_res.json();
+
+			if(res.message === "Success") {
+				this.setState({
+					reportText: '',
+					show_notification: true,
+					notificationMessage: 'Report Submitted',
+					modalVisible: false
+				})
+			} else {
+				this.setState({
+					reportText: '',
+					show_notification: true,
+					notificationMessage: 'Oops, something wrong',
+					modalVisible: false
+				})
+			}
+
+		}
+	}
+
 	render() {
 		const {
 			confession,
@@ -152,13 +184,16 @@ export default class ConfessionsFeedScreen extends PureComponent {
 			modalVisible,
 			confessionsList,
 			actionSheetSelectedId,
-			shouldShowNotification,
+			show_notification,
+			reportText,
+			notificationMessage
 		} = this.state;
 		const actionSheetButtonArray = [
 			'Cancel',
 			hiddenPosts.includes(actionSheetSelectedId) ? 'Unhide' : 'Hide',
 			'Report'
 		];
+
 		return (
 			<Layout headerTitle="Feed">
 				<Modal
@@ -167,29 +202,33 @@ export default class ConfessionsFeedScreen extends PureComponent {
 					avoidKeyboard
 					onBackdropPress={() => this.setState({ modalVisible: false })}
 				>
-					<View style={{ height: width / 1.5, width: width / 1.5, backgroundColor: 'white' }}>
-						<Text>
-							{`What's wrong with this post ${actionSheetSelectedId}? Send report to AUA tech support!`}
-						</Text>
-						<TextInput
-							style={{
-								height: '50%',
-								width: '100%',
-								fontSize: 20,
-							}}
+					<ReportView>
+						<ReportCancelButtonView>
+							<ReportCancelButton onPress={() => this.setState({ modalVisible: false })}>
+								<ReportCancelButtonText>
+									X
+								</ReportCancelButtonText>
+							</ReportCancelButton>
+						</ReportCancelButtonView>
+						<ReportTextInput
 							multiline
 							numberOfLines={4}
-							onChangeText={this.onTextChange}
-							value={confession}
-							placeholder="Write your report"
+							onChangeText={(reportText) => this.setState({reportText})}
+							value={reportText}
+							placeholder="What is the reason you report this confession?"
 							placeholderTextColor={colors.placeholderColor}
 						/>
-					</View>
+						<ReportButton onPress={() => this.submitReport()}>
+							<ReportButtonText>
+								Report
+							</ReportButtonText>
+						</ReportButton>
+					</ReportView>
 				</Modal>
 				<SendNotification
-					shouldShowNotification={shouldShowNotification}
-					done={() => this.setState({ shouldShowNotification: false })}
-					message="Confession Copied"
+					show_notification={show_notification}
+					done={() => this.setState({ show_notification: false })}
+					message={notificationMessage}
 				/>
 				<FlatList
 					key="scrollView"
@@ -216,3 +255,50 @@ export default class ConfessionsFeedScreen extends PureComponent {
 		);
 	}
 }
+
+const ReportCancelButtonView = styled.View`
+	justify-content: flex-end;
+	flex-direction: row;
+	padding: 5px;
+`;
+
+const ReportCancelButton = styled.TouchableOpacity`
+	height: 30;
+	width: 30;
+	justify-content: center;
+	align-items: center;
+`;
+
+const ReportCancelButtonText = styled.Text`
+	font-size: 23;
+	opacity: 0.7;
+`;
+
+const ReportTextInput = styled.TextInput`
+	height: 210;
+	width: 100%;
+	fontSize: 20;
+	padding: 20px;
+`;
+
+const ReportButton = styled.TouchableOpacity`
+	height: 50;
+	width: 100%;
+	align-items: center;
+	justify-content: center;
+	background-color: ${colors.noInternetColor};
+	border-bottom-left-radius: 10;
+	border-bottom-right-radius: 10;
+`;
+
+const ReportButtonText = styled.Text`
+	fontSize: 20;
+	color: white;
+`;
+
+const ReportView = styled.View`
+	height: 300;
+	width: ${0.9 * width};
+	background-color: white;
+	border-radius: 10;
+`;
