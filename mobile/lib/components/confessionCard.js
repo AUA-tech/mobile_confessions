@@ -70,7 +70,10 @@ class ConfessionCard extends PureComponent {
               <NumberText>{confessionNumber}</NumberText>
               {/* <DateText>{moment(created_time).format('MMM D, HH:mm')}</DateText> */}
               <ActionView onPress={() => open_action_sheet(id)}>
-                <Text>=></Text>
+                <Image
+                  style={{width: 15, height: 15, transform: [{rotateZ: '180deg'}], marginTop: 15 }} // this marginTop thing is a hacky way...
+                  source={require('../assets/actionSheetButton.png')}
+                />
               </ActionView>
             </RowView>
           </TextContentView>
@@ -100,7 +103,10 @@ class ConfessionCard extends PureComponent {
               <Text style={{paddingHorizontal: 5}}>{number_of_comments} Comment</Text>
             </RowView>
             <ActionView onPress={() => open_action_sheet(id)}>
-              <Text>=></Text>
+              <Image
+                style={{width: 15, height: 15}}
+                source={require('../assets/actionSheetButton.png')}
+              />
             </ActionView>
           </RowView>
           {comments_ui}
