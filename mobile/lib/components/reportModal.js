@@ -82,7 +82,7 @@ const ReportButton = styled.TouchableOpacity`
   width: 100%;
   align-items: center;
   justify-content: center;
-  background-color: ${colors.noInternetColor};
+  background-color: ${colors.warningColor};
   border-bottom-left-radius: 10;
   border-bottom-right-radius: 10;
 `;

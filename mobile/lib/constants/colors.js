@@ -6,7 +6,7 @@ const colors = {
   headerColor: '#4B4B4B',
   softTextColor: '#8E8E93',
   placeholderColor: '#BABABA',
-  noInternetColor: '#CB3434'
+  warningColor: '#CB3434'
 }
 
 export default colors;

@@ -41,9 +41,9 @@ class Header extends PureComponent {
     const { is_connected } = this.state;
 
     return(
-      <CenteredView style={{backgroundColor: is_connected ? colors.primaryColor : colors.noInternetColor }}>
+      <CenteredView style={{backgroundColor: is_connected ? colors.primaryColor : colors.warningColor }}>
         <StatusBar
-          backgroundColor={ is_connected ? colors.primaryColor : colors.noInternetColor }
+          backgroundColor={ is_connected ? colors.primaryColor : colors.warningColor }
           barStyle="light-content"
         />
         <HeaderText>{title}</HeaderText>
