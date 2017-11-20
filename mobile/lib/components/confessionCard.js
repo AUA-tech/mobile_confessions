@@ -21,6 +21,11 @@ class ConfessionCard extends PureComponent {
   state = {
     seeMore: false
   }
+  selectAndOpenActionSheet = (id) => {
+    const { selectPostId, openActionSheet } = this.props;
+    selectPostId(id);
+    openActionSheet();
+  }
 
   render() {
     const {
@@ -33,7 +38,6 @@ class ConfessionCard extends PureComponent {
       created_time,
       reactions,
       comments,
-      open_action_sheet,
       show_copied,
       isHidden,
       openReactionsModal
@@ -70,7 +74,7 @@ class ConfessionCard extends PureComponent {
             <RowView>
               <NumberText>{confessionNumber}</NumberText>
               {/* <DateText>{moment(created_time).format('MMM D, HH:mm')}</DateText> */}
-              <ActionView onPress={() => open_action_sheet(id)}>
+              <ActionView onPress={() => this.selectAndOpenActionSheet(id)}>
                 <Image
                   style={{width: 15, height: 15, transform: [{rotateZ: '180deg'}], marginTop: 15 }} // this marginTop thing is a hacky way...
                   source={require('../assets/actionSheetButton.png')}
@@ -105,7 +109,7 @@ class ConfessionCard extends PureComponent {
               </TouchableOpacity>
               <Text style={{paddingHorizontal: 5}}>{number_of_comments} Comment</Text>
             </RowView>
-            <ActionView onPress={() => open_action_sheet(id)}>
+            <ActionView onPress={() => this.selectAndOpenActionSheet(id)}>
               <Image
                 style={{width: 15, height: 15}}
                 source={require('../assets/actionSheetButton.png')}

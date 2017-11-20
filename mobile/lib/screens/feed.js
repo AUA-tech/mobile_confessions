@@ -95,10 +95,8 @@ export default class ConfessionsFeedScreen extends PureComponent {
 			openReactionsModal={() => this.setState({ reactionsModalVisible: true })}
 			isHidden={this.state.hiddenPosts.includes(confession.id)}
 			show_copied={() => this.setState({ show_notification: true, notificationMessage: "Confession Copied" })}
-			open_action_sheet={(id) => {
-				this.setState({ actionSheetSelectedId: id });
-				this.ActionSheet.show();
-			}}
+			selectPostId={(id) => this.setState({ actionSheetSelectedId: id })}
+			openActionSheet={() => this.ActionSheet.show()}
 		/>
 	);
 
