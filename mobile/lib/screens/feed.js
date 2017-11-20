@@ -1,10 +1,8 @@
 import React, { PureComponent } from 'react';
-import { FlatList, AsyncStorage, ActivityIndicator, View, Text, TextInput, Alert } from 'react-native';
+import { FlatList, AsyncStorage, ActivityIndicator, Alert } from 'react-native';
 import { differenceBy } from 'lodash';
-import Modal from 'react-native-modal';
 import ActionSheet from 'react-native-actionsheet';
 import { NavigationActions } from 'react-navigation';
-import styled from 'styled-components/native';
 
 import Layout from '../components/layout';
 import TabIcon from '../components/tabIcon';
@@ -13,7 +11,6 @@ import SendNotification from '../components/sendNotification';
 import ReportModal from '../components/reportModal';
 import ReactionsModal from '../components/reactionsModal';
 import colors from '../constants/colors';
-import { width } from '../constants/styles';
 import { fetchFb, fetchNext, awsPost } from '../utils';
 
 export default class ConfessionsFeedScreen extends PureComponent {
@@ -71,10 +68,10 @@ export default class ConfessionsFeedScreen extends PureComponent {
 	responseInfoCallback = (error, result) => {
 		if (error) {
 			AsyncStorage.getItem('cachedPosts')
-			.then((cachedPostsJson) => {
-				const cachedPosts = JSON.parse(cachedPostsJson) || [];
-				this.setState({ fetchStatus: 0, confessionsList: cachedPosts });
-			})
+				.then((cachedPostsJson) => {
+					const cachedPosts = JSON.parse(cachedPostsJson) || [];
+					this.setState({ fetchStatus: 0, confessionsList: cachedPosts });
+				});
 			console.log('Error fetching data: ', error);
 			// May later change to 4, which will mean error: not needed yet
 		} else {
@@ -97,7 +94,7 @@ export default class ConfessionsFeedScreen extends PureComponent {
 				return;
 			}
 			const reactionsArray = result.reactions ? result.reactions.data : [];
-			this.setState({reactionsArray});
+			this.setState({ reactionsArray });
 		}
 		fetchFb(id, 'reactions', callback);
 	}
@@ -110,8 +107,8 @@ export default class ConfessionsFeedScreen extends PureComponent {
 				this.setState({ reactionsModalVisible: true })
 			}}
 			isHidden={this.state.hiddenPosts.includes(confession.id)}
-			show_copied={() => this.setState({ show_notification: true, notificationMessage: "Confession Copied" })}
-			selectPostId={(id) => this.setState({ actionSheetSelectedId: id })}
+			show_copied={() => this.setState({ show_notification: true, notificationMessage: 'Confession Copied' })}
+			selectPostId={postId => this.setState({ actionSheetSelectedId: postId })}
 			openActionSheet={() => this.ActionSheet.show()}
 		/>
 	);
@@ -137,14 +134,14 @@ export default class ConfessionsFeedScreen extends PureComponent {
 			console.warn('Close ActionSheet');
 			break;
 		case 1:
-			Alert.alert( alertMessage, '', [
+			Alert.alert(alertMessage, '', [
 				{ text: 'No', onPress: null, style: 'cancel' },
 				{
 					text: 'Yes',
 					onPress: async () => {
 						let hiddenPosts = [];
-						if(isHidden) {
-							hiddenPosts = statePosts.filter((id) => id !== actionSheetSelectedId);
+						if (isHidden) {
+							hiddenPosts = statePosts.filter(postId => postId !== actionSheetSelectedId);
 						} else {
 							hiddenPosts = [ ...statePosts, actionSheetSelectedId ];
 						}
@@ -166,37 +163,34 @@ export default class ConfessionsFeedScreen extends PureComponent {
 
 	async submitReport() {
 		const { reportText, actionSheetSelectedId, confessionsList } = this.state;
-		if(reportText.trim()){
-
-			const actionSheetSelectedObj = confessionsList.filter((conf) => conf.id === actionSheetSelectedId)[0];
+		if (reportText.trim()) {
+			const actionSheetSelectedObj = confessionsList.filter(conf => conf.id === actionSheetSelectedId)[0];
 			const actionSheetSelectedMsg = actionSheetSelectedObj && actionSheetSelectedObj.message;
 
 			const feedback = `REPORT: ${reportText} Message: ${actionSheetSelectedMsg}`;
-			const fetched_res = await awsPost('send_feedback', { feedback });
-			const res = await fetched_res.json();
+			const fetchedRes = await awsPost('send_feedback', { feedback });
+			const res = await fetchedRes.json();
 
-			if(res.message === "Success") {
+			if (res.message === 'Success') {
 				this.setState({
 					reportText: '',
 					show_notification: true,
 					notificationMessage: 'Report Submitted',
-					modalVisible: false
-				})
+					modalVisible: false,
+				});
 			} else {
 				this.setState({
 					reportText: '',
 					show_notification: true,
 					notificationMessage: 'Oops, something wrong',
-					modalVisible: false
-				})
+					modalVisible: false,
+				});
 			}
-
 		}
 	}
 
 	render() {
 		const {
-			confession,
 			fetchStatus,
 			hiddenPosts,
 			modalVisible,
@@ -206,16 +200,16 @@ export default class ConfessionsFeedScreen extends PureComponent {
 			show_notification,
 			reportText,
 			notificationMessage,
-			reactionsArray
+			reactionsArray,
 		} = this.state;
 		const actionSheetButtonArray = [
 			'Cancel',
 			hiddenPosts.includes(actionSheetSelectedId) ? 'Unhide' : 'Hide',
-			'Report'
+			'Report',
 		];
 
 		return (
-			<Layout headerTitle="Feed">
+			<Layout headerTitle='Feed'>
 				<ReactionsModal
 					modalVisible={reactionsModalVisible}
 					closeModal={() => this.setState({ reactionsModalVisible: false, reactionsArray: [] })}
@@ -224,7 +218,7 @@ export default class ConfessionsFeedScreen extends PureComponent {
 				<ReportModal
 					modalVisible={modalVisible}
 					reportText={reportText}
-					onReportTextChange={(reportText) => this.setState({reportText})}
+					onReportTextChange={t => this.setState({ reportText: t })}
 					closeModal={() => this.setState({ modalVisible: false })}
 					submitReport={() => this.submitReport()}
 				/>
@@ -234,7 +228,7 @@ export default class ConfessionsFeedScreen extends PureComponent {
 					message={notificationMessage}
 				/>
 				<FlatList
-					key="scrollView"
+					key='scrollView'
 					data={confessionsList}
 					style={{ backgroundColor: colors.bgColor }}
 					renderItem={this.createConfessionCards}
@@ -252,7 +246,7 @@ export default class ConfessionsFeedScreen extends PureComponent {
 					options={actionSheetButtonArray}
 					cancelButtonIndex={0}
 					destructiveButtonIndex={2}
-					onPress={(i) => this.handleActionSheet(i)}
+					onPress={i => this.handleActionSheet(i)}
 				/>
 			</Layout>
 		);

@@ -6,49 +6,47 @@ import colors from '../constants/colors';
 import { width } from '../constants/styles';
 
 export default class ReportModal extends PureComponent {
-  
-  render(){
-    const {
-      modalVisible,
-      reportText,
-      onReportTextChange,
-      closeModal,
-      submitReport
-    } = this.props;
-    return(
-      <Modal
-        style={{ alignItems: 'center', justifyContent: 'center' }}
-        isVisible={modalVisible}
-        avoidKeyboard
-        onBackdropPress={closeModal}
-      >
-        <ReportView>
-          <ReportCancelButtonView>
-            <ReportCancelButton onPress={closeModal}>
-              <ReportCancelButtonText>
+	render() {
+		const {
+			modalVisible,
+			reportText,
+			onReportTextChange,
+			closeModal,
+			submitReport,
+		} = this.props;
+		return (
+			<Modal
+				style={{ alignItems: 'center', justifyContent: 'center' }}
+				isVisible={modalVisible}
+				avoidKeyboard
+				onBackdropPress={closeModal}
+			>
+				<ReportView>
+					<ReportCancelButtonView>
+						<ReportCancelButton onPress={closeModal}>
+							<ReportCancelButtonText>
                 X
-              </ReportCancelButtonText>
-            </ReportCancelButton>
-          </ReportCancelButtonView>
-          <ReportTextInput
-            multiline
-            numberOfLines={4}
-            onChangeText={onReportTextChange}
-            value={reportText}
-            placeholder="What is the reason you report this confession?"
-            placeholderTextColor={colors.placeholderColor}
-          />
-          <ReportButton onPress={() => submitReport()}>
-            <ReportButtonText>
-              Report
-            </ReportButtonText>
-          </ReportButton>
-        </ReportView>
-      </Modal>
-    );
-  }
+							</ReportCancelButtonText>
+						</ReportCancelButton>
+					</ReportCancelButtonView>
+					<ReportTextInput
+						multiline
+						numberOfLines={4}
+						onChangeText={onReportTextChange}
+						value={reportText}
+						placeholder='What is the reason you report this confession?'
+						placeholderTextColor={colors.placeholderColor}
+					/>
+					<ReportButton onPress={() => submitReport()}>
+						<ReportButtonText>
+							Report
+						</ReportButtonText>
+					</ReportButton>
+				</ReportView>
+			</Modal>
+		);
+	}
 }
-
 
 const ReportCancelButtonView = styled.View`
   justify-content: flex-end;

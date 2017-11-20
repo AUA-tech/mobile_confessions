@@ -1,64 +1,62 @@
 import React, { PureComponent } from 'react';
 import styled from 'styled-components/native';
-import { StatusBar, NetInfo, View, Text } from 'react-native';
+import { StatusBar, NetInfo, View } from 'react-native';
 
 import colors from '../constants/colors';
 
 class Header extends PureComponent {
+	state = {
+		is_connected: true,
+	}
 
-  state = {
-    is_connected: true,
-    which_connection: 'wifi'
-  }
+	componentDidMount() {
+		const handleFirstConnectivityChange = (reach) => {
+			switch (reach.type) {
+			case 'none':
+			case 'unknown':
+				this.setState({ is_connected: false });
+				break;
+			case 'wifi':
+			case 'cellular':
+				this.setState({ is_connected: true });
+				break;
+			default:
+				break;
+			}
+		};
+		NetInfo.addEventListener(
+			'connectionChange',
+			handleFirstConnectivityChange,
+		);
+	}
 
-  componentDidMount() {
-    const handleFirstConnectivityChange = (reach) => {
-      switch (reach.type) {
-        case 'none':
-        case 'unknown':
-          this.setState({ which_connection: reach, is_connected: false })
-          break;
-        case 'wifi':
-        case 'cellular':
-          this.setState({ which_connection: reach, is_connected: true })
-          break;
-      }
-    }
-    NetInfo.addEventListener(
-      'connectionChange',
-      handleFirstConnectivityChange
-    );
-  }
+	componentWillUnmount() {
+		NetInfo.removeEventListener('connectionChange');
+	}
 
-  componentWillUnmount() {
-    NetInfo.removeEventListener(
-      'connectionChange'
-    )
-  }
+	render() {
+		const { title } = this.props;
+		const { is_connected } = this.state;
 
-  render() {
-    const { title } = this.props;
-    const { is_connected } = this.state;
-
-    return(
-      <CenteredView style={{backgroundColor: is_connected ? colors.primaryColor : colors.warningColor }}>
-        <StatusBar
-          backgroundColor={ is_connected ? colors.primaryColor : colors.warningColor }
-          barStyle="light-content"
-        />
-        <HeaderText>{title}</HeaderText>
-        {
-          is_connected ? null :
-          <View>
-            <NoInternetConnectionText>
-              no internet connection
-            </NoInternetConnectionText>
-          </View>
-        }
-      </CenteredView>
-    )
-  }
-
+		return (
+			<CenteredView style={{ backgroundColor: is_connected ? colors.primaryColor : colors.warningColor }}>
+				<StatusBar
+					backgroundColor={is_connected ? colors.primaryColor : colors.warningColor}
+					barStyle="light-content"
+				/>
+				<HeaderText>{title}</HeaderText>
+				{
+					is_connected ?
+						null :
+						<View>
+							<NoInternetConnectionText>
+								no internet connection
+							</NoInternetConnectionText>
+						</View>
+				}
+			</CenteredView>
+		);
+	}
 }
 
 const CenteredView = styled.View`
@@ -66,7 +64,7 @@ const CenteredView = styled.View`
   justify-content: center;
   height: 10%;
   min-height: 50;
-`
+`;
 
 const HeaderText = styled.Text`
   color: white;
@@ -74,13 +72,13 @@ const HeaderText = styled.Text`
   font-weight: 700;
   padding-top: 15;
   font-family: Roboto;
-`
+`;
 
 const NoInternetConnectionText = styled.Text`
   color: white;
   font-size: 10;
   opacity: 0.8;
   font-family: Roboto;
-`
+`;
 
 export default Header;
