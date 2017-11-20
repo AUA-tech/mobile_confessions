@@ -56,7 +56,7 @@ export default class ReactionsModal extends PureComponent {
           </ReactorName>
         </RowView>
         <View style={{justifyContent: 'center', alignItems: 'center', paddingRight: 20}}>
-          <Text style={{fontSize: 40}}>
+          <Text style={{fontSize: 40, fontFamily: 'Roboto'}}>
             {this.getEmoji(reactionObj.type)}
           </Text>
         </View>
@@ -117,6 +117,7 @@ const ReactorName = styled.Text`
   color: ${colors.headerColor};
   fontWeight: 700;
   width: ${width * 0.5}
+  font-family: Roboto;
 `
 
 const RowView = styled.View`

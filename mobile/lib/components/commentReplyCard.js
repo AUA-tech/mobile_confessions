@@ -60,11 +60,11 @@ class CommentReplyCard extends PureComponent {
             </CommenterReplyName>
             <DateText>{moment(created_time).format('MMM D, HH:mm')}</DateText>
           </RowView>
-          <Text>
+          <Text style={{fontFamily: 'Roboto'}}>
             {linkifiedMessage}
           </Text>
           <TouchableOpacity style={{paddingVertical: 5}} onPress={() => openReactionsModal(id)}>
-            <Text>{number_of_reactions} Likes</Text>
+            <Text style={{fontFamily: 'Roboto'}}>{number_of_reactions} Likes</Text>
           </TouchableOpacity>
         </CommentReplyMessageView>
       </RowView>
@@ -81,7 +81,8 @@ const CommenterReplyImage = styled.Image`
 const CommenterReplyName = styled.Text`
   color: ${colors.headerColor};
   fontWeight: 700;
-  width: ${width * 0.3}
+  width: ${width * 0.3};
+  font-family: Roboto;
 `
 
 const CommentReplyMessageView = styled.View`
@@ -93,6 +94,7 @@ const DateText = styled.Text`
   color: ${colors.softTextColor};
   font-weight: 300;
   font-size: 13;
+  font-family: Roboto;
 `
 
 const RowView = styled.View`

@@ -35,6 +35,7 @@ const InfoCard = ({
 const DescriptionText = styled.Text`
   color: ${colors.primaryColor}
   font-size: 15;
+  font-family: Roboto;
 `
 
 const AuthorImage = styled.Image`
@@ -46,6 +47,7 @@ const AuthorName = styled.Text`
   color: ${colors.primaryColor};
   font-weight: 700;
   font-size: 20;
+  font-family: Roboto;
 `
 
 const RowView = styled.View`

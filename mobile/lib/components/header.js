@@ -73,12 +73,14 @@ const HeaderText = styled.Text`
   font-size: 22;
   font-weight: 700;
   padding-top: 15;
+  font-family: Roboto;
 `
 
 const NoInternetConnectionText = styled.Text`
   color: white;
   font-size: 10;
   opacity: 0.8;
+  font-family: Roboto;
 `
 
 export default Header;

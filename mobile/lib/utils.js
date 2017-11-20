@@ -87,9 +87,9 @@ export const linkifyMessage = (message) => {
     if(!link_arr[i]) return acc;
     const splitted = mes.split(link_arr[i].raw);
     acc.push(
-      <Text key={splitted[0]}>
+      <Text style={{fontFamily: 'Roboto'}} key={splitted[0]}>
         {splitted[0]}
-        <Text style={{color: 'blue'}} onPress={() => linkTo(link_arr[i].raw)}>
+        <Text style={{color: 'blue', fontFamily: 'Roboto'}} onPress={() => linkTo(link_arr[i].raw)}>
           {link_arr[i].raw}
         </Text>
       </Text>

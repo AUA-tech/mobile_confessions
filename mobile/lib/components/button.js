@@ -29,6 +29,7 @@ const ButtonTitle = styled.Text`
   color: white;
   font-weight: 700;
   font-size: 20;
+  font-family: Roboto;
 `
 
 export default Button;

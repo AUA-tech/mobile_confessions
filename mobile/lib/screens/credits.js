@@ -89,7 +89,7 @@ export default class NewConfessionScreen extends PureComponent {
               </AuthorModalView>
             </RowView>
             <AuthorModalFullDescriptionView>
-              <Text>{selected_author.full_description}</Text>
+              <Text style={{fontFamily: 'Roboto'}}>{selected_author.full_description}</Text>
             </AuthorModalFullDescriptionView>
             <RowView>
               {author_links}
@@ -130,11 +130,13 @@ const AuthorModalName = styled.Text`
   color: ${colors.headerColor};
   font-weight: 700;
   font-size: 16;
+  font-family: Roboto;
 `
 
 const AuthorModalDescription = styled.Text`
   font-size: 14;
   margin-top: 5;
+  font-family: Roboto;
 `
 
 const AuthorModalFullDescriptionView = styled.View`
@@ -173,6 +175,7 @@ const StyledTextInput = styled.TextInput`
   margin-top: 2%;
   padding: 20px;
   font-size: 20;
+  font-family: Roboto;
 `
 
 const AuthorsScrollView = styled.ScrollView`

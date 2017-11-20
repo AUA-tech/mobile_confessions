@@ -99,6 +99,7 @@ const StyledTextInput = styled.TextInput`
   padding: 20px;
   font-size: 20;
   margin-bottom: 8%;
+  font-family: Roboto;
 `
 
 const AttachmentContainer = styled.View`
@@ -111,6 +112,7 @@ const AttachmentText = styled.TextInput`
   background-color: white;
   padding: 20px;
   font-size: 20;
+  font-family: Roboto;
 `
 
 const AttachedFilesBox = styled.View`

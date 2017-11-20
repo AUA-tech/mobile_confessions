@@ -66,6 +66,7 @@ const ReportCancelButton = styled.TouchableOpacity`
 const ReportCancelButtonText = styled.Text`
   font-size: 23;
   opacity: 0.7;
+  font-family: Roboto;
 `;
 
 const ReportTextInput = styled.TextInput`
@@ -73,6 +74,7 @@ const ReportTextInput = styled.TextInput`
   width: 100%;
   fontSize: 20;
   padding: 20px;
+  font-family: Roboto;
 `;
 
 const ReportButton = styled.TouchableOpacity`
@@ -88,6 +90,7 @@ const ReportButton = styled.TouchableOpacity`
 const ReportButtonText = styled.Text`
   fontSize: 20;
   color: white;
+  font-family: Roboto;
 `;
 
 const ReportView = styled.View`

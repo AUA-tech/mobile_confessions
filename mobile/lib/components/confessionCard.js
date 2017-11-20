@@ -102,7 +102,7 @@ class ConfessionCard extends PureComponent {
               <NumberText>{confessionNumber}</NumberText>
               <DateText>{moment(created_time).format('MMM D, HH:mm')}</DateText>
             </RowView>
-            <Text onLongPress={copyOnLongPress}>
+            <Text style={{fontFamily: 'Roboto'}} onLongPress={copyOnLongPress}>
               {linkifiedMessage}
             </Text>
           </TextContentView>
@@ -115,9 +115,9 @@ class ConfessionCard extends PureComponent {
           <RowView style={{padding: 10}}>
             <RowView>
               <TouchableOpacity style={{paddingHorizontal: 5}} onPress={() => openReactionsModal(id)}>
-                <Text>{number_of_reactions} Likes</Text>
+                <Text style={{fontFamily: 'Roboto'}}>{number_of_reactions} Likes</Text>
               </TouchableOpacity>
-              <Text style={{paddingHorizontal: 5}}>{number_of_comments} Comment</Text>
+              <Text style={{paddingHorizontal: 5, fontFamily: 'Roboto'}}>{number_of_comments} Comment</Text>
             </RowView>
             <ActionView onPress={() => this.selectAndOpenActionSheet(id)}>
               <Image
@@ -135,12 +135,12 @@ class ConfessionCard extends PureComponent {
               this.state.seeMore ?
               <View style={{padding: COMMENT_PADDING}}>
                 <TouchableOpacity onPress={() => this.setState({seeMore: false})}>
-                  <Text>See Less comments</Text>
+                  <Text style={{fontFamily: 'Roboto'}}>See Less comments</Text>
                 </TouchableOpacity>
               </View> :
               <View style={{padding: COMMENT_PADDING}}>
                 <TouchableOpacity onPress={() => this.setState({seeMore: true})}>
-                  <Text>See More comments</Text>
+                  <Text style={{fontFamily: 'Roboto'}}>See More comments</Text>
                 </TouchableOpacity>
               </View>
             )
@@ -155,12 +155,14 @@ const NumberText = styled.Text`
   color: ${colors.headerColor};
   font-weight: 700;
   font-size: 20;
+  font-family: Roboto;
 `
 
 const DateText = styled.Text`
   color: ${colors.softTextColor};
   font-weight: 300;
   font-size: 13;
+  font-family: Roboto;
 `
 
 const RowView = styled.View`

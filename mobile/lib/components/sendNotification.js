@@ -49,6 +49,7 @@ export default class SendNotification extends PureComponent {
 
 const NotificationText = styled.Text`
   color: white;
+  font-family: Roboto;
 `
 const NOTIFICATION_HEIGHT = 40;
 const NOTIFICATION_WIDTH = 170;
