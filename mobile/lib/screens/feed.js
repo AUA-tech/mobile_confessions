@@ -10,6 +10,7 @@ import Layout from '../components/layout';
 import TabIcon from '../components/tabIcon';
 import ConfessionCard from '../components/confessionCard';
 import SendNotification from '../components/sendNotification';
+import ReportModal from '../components/reportModal';
 import colors from '../constants/colors';
 import { width } from '../constants/styles';
 import { fetchFb, fetchNext, awsPost } from '../utils';
@@ -196,35 +197,13 @@ export default class ConfessionsFeedScreen extends PureComponent {
 
 		return (
 			<Layout headerTitle="Feed">
-				<Modal
-					style={{ alignItems: 'center', justifyContent: 'center' }}
-					isVisible={modalVisible}
-					avoidKeyboard
-					onBackdropPress={() => this.setState({ modalVisible: false })}
-				>
-					<ReportView>
-						<ReportCancelButtonView>
-							<ReportCancelButton onPress={() => this.setState({ modalVisible: false })}>
-								<ReportCancelButtonText>
-									X
-								</ReportCancelButtonText>
-							</ReportCancelButton>
-						</ReportCancelButtonView>
-						<ReportTextInput
-							multiline
-							numberOfLines={4}
-							onChangeText={(reportText) => this.setState({reportText})}
-							value={reportText}
-							placeholder="What is the reason you report this confession?"
-							placeholderTextColor={colors.placeholderColor}
-						/>
-						<ReportButton onPress={() => this.submitReport()}>
-							<ReportButtonText>
-								Report
-							</ReportButtonText>
-						</ReportButton>
-					</ReportView>
-				</Modal>
+				<ReportModal
+					modalVisible={modalVisible}
+					reportText={reportText}
+					onReportTextChange={(reportText) => this.setState({reportText})}
+					closeModal={() => this.setState({ modalVisible: false })}
+					submitReport={() => this.submitReport()}
+				/>
 				<SendNotification
 					show_notification={show_notification}
 					done={() => this.setState({ show_notification: false })}
@@ -255,50 +234,3 @@ export default class ConfessionsFeedScreen extends PureComponent {
 		);
 	}
 }
-
-const ReportCancelButtonView = styled.View`
-	justify-content: flex-end;
-	flex-direction: row;
-	padding: 5px;
-`;
-
-const ReportCancelButton = styled.TouchableOpacity`
-	height: 30;
-	width: 30;
-	justify-content: center;
-	align-items: center;
-`;
-
-const ReportCancelButtonText = styled.Text`
-	font-size: 23;
-	opacity: 0.7;
-`;
-
-const ReportTextInput = styled.TextInput`
-	height: 210;
-	width: 100%;
-	fontSize: 20;
-	padding: 20px;
-`;
-
-const ReportButton = styled.TouchableOpacity`
-	height: 50;
-	width: 100%;
-	align-items: center;
-	justify-content: center;
-	background-color: ${colors.noInternetColor};
-	border-bottom-left-radius: 10;
-	border-bottom-right-radius: 10;
-`;
-
-const ReportButtonText = styled.Text`
-	fontSize: 20;
-	color: white;
-`;
-
-const ReportView = styled.View`
-	height: 300;
-	width: ${0.9 * width};
-	background-color: white;
-	border-radius: 10;
-`;
