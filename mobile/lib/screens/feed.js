@@ -49,7 +49,8 @@ export default class ConfessionsFeedScreen extends PureComponent {
 			actionSheetSelectedId: '',
 			show_notification: false,
 			reportText: '',
-			reactionsModalVisible: false
+			reactionsModalVisible: false,
+			reactionsArray: []
 		};
 	}
 
@@ -89,10 +90,25 @@ export default class ConfessionsFeedScreen extends PureComponent {
 		}
 	}
 
+	fetchPostReactions = (id) => {
+		const callback = (error, result) => {
+			if (error) {
+				console.warn(error);
+				return;
+			}
+			const reactionsArray = result.reactions ? result.reactions.data : [];
+			this.setState({reactionsArray});
+		}
+		fetchFb(id, 'reactions', callback);
+	}
+
 	createConfessionCards = ({ item: confession }) => (
 		<ConfessionCard
 			{...confession}
-			openReactionsModal={() => this.setState({ reactionsModalVisible: true })}
+			openReactionsModal={() => {
+				this.fetchPostReactions(confession.id);
+				this.setState({ reactionsModalVisible: true })
+			}}
 			isHidden={this.state.hiddenPosts.includes(confession.id)}
 			show_copied={() => this.setState({ show_notification: true, notificationMessage: "Confession Copied" })}
 			selectPostId={(id) => this.setState({ actionSheetSelectedId: id })}
@@ -189,7 +205,8 @@ export default class ConfessionsFeedScreen extends PureComponent {
 			actionSheetSelectedId,
 			show_notification,
 			reportText,
-			notificationMessage
+			notificationMessage,
+			reactionsArray
 		} = this.state;
 		const actionSheetButtonArray = [
 			'Cancel',
@@ -201,7 +218,8 @@ export default class ConfessionsFeedScreen extends PureComponent {
 			<Layout headerTitle="Feed">
 				<ReactionsModal
 					modalVisible={reactionsModalVisible}
-					closeModal={() => this.setState({ reactionsModalVisible: false })}
+					closeModal={() => this.setState({ reactionsModalVisible: false, reactionsArray: [] })}
+					data={reactionsArray}
 				/>
 				<ReportModal
 					modalVisible={modalVisible}

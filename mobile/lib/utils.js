@@ -53,6 +53,9 @@ export const fetchFb = (id, type, callback) => {
     case 'user':
       opts.parameters.fields.string = 'picture,name,link';
       break;
+    case 'reactions':
+      opts.parameters.fields.string = 'reactions.limit(1000){name,id,type,pic,link}';
+      break;
     // case 'comments':
     //   opts.parameters.fields.string = 'comments{comments{reactions,message,created_time,from},message,reactions,created_time,from}';
     //   break;
