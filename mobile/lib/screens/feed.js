@@ -105,8 +105,8 @@ export default class ConfessionsFeedScreen extends PureComponent {
 	createConfessionCards = ({ item: confession }) => (
 		<ConfessionCard
 			{...confession}
-			openReactionsModal={() => {
-				this.fetchPostReactions(confession.id);
+			openReactionsModal={(id) => {
+				this.fetchPostReactions(id);
 				this.setState({ reactionsModalVisible: true })
 			}}
 			isHidden={this.state.hiddenPosts.includes(confession.id)}

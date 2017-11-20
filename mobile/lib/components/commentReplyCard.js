@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import styled from 'styled-components/native';
-import { Text, Alert, TouchableWithoutFeedback } from 'react-native';
+import { Text, Alert, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
 import moment from 'moment';
 
 import {
@@ -33,9 +33,18 @@ class CommentReplyCard extends PureComponent {
     from && await fetchFb(from.id, 'user', this.responseInfoCallback);
   }
   render() {
-    const {created_time, message, reactions, from} = this.props;
+    const {
+      id,
+      created_time,
+      message,
+      reactions,
+      from,
+      openReactionsModal
+    } = this.props;
 
     const linkifiedMessage = linkifyMessage(message);
+
+    const number_of_reactions = reactions ? reactions.data.length : 0;
 
     return (
       <RowView style={{padding: COMMENT_PADDING, paddingLeft: REPLY_LEFT_PADDING}}>
@@ -54,6 +63,9 @@ class CommentReplyCard extends PureComponent {
           <Text>
             {linkifiedMessage}
           </Text>
+          <TouchableOpacity style={{paddingVertical: 5}} onPress={() => openReactionsModal(id)}>
+            <Text>{number_of_reactions} Likes</Text>
+          </TouchableOpacity>
         </CommentReplyMessageView>
       </RowView>
     )

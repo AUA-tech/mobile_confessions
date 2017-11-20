@@ -69,6 +69,7 @@ export default class ReactionsModal extends PureComponent {
         isVisible={modalVisible}
         avoidKeyboard
         onBackdropPress={closeModal}
+        useNativeDriver={true}
       >
         <ReactionsWrapper>
           <ReactionsTopBar />

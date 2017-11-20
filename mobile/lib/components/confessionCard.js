@@ -14,7 +14,7 @@ import {
   REPLY_LEFT_PADDING
 } from '../constants/styles';
 import colors from '../constants/colors';
-import { linkTo, linkifyMessage } from '../utils';
+import { linkTo, linkifyMessage, fetchFb } from '../utils';
 
 class ConfessionCard extends PureComponent {
 
@@ -63,8 +63,18 @@ class ConfessionCard extends PureComponent {
     const comments_ui = comments &&
     (
       this.state.seeMore ?
-      comments.data.map((comment) => <CommentCard key={comment.id} {...comment} />) :
-      <CommentCard key={comments.data[0].id} {...comments.data[0]} />
+      comments.data.map((comment) =>
+        <CommentCard
+          key={comment.id}
+          {...comment}
+          openReactionsModal={(id) => openReactionsModal(id)}
+        />
+      ) :
+      <CommentCard
+        key={comments.data[0].id}
+        {...comments.data[0]}
+        openReactionsModal={(id) => openReactionsModal(id)}
+      />
     )
     let content = null;
     if(isHidden)
@@ -104,7 +114,7 @@ class ConfessionCard extends PureComponent {
           }
           <RowView style={{padding: 10}}>
             <RowView>
-              <TouchableOpacity style={{paddingHorizontal: 5}} onPress={() => openReactionsModal()}>
+              <TouchableOpacity style={{paddingHorizontal: 5}} onPress={() => openReactionsModal(id)}>
                 <Text>{number_of_reactions} Likes</Text>
               </TouchableOpacity>
               <Text style={{paddingHorizontal: 5}}>{number_of_comments} Comment</Text>

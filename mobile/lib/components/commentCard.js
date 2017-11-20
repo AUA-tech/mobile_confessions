@@ -35,16 +35,38 @@ class CommentCard extends PureComponent {
     from && await fetchFb(from.id, 'user', this.responseInfoCallback);
   }
   render() {
-    const {created_time, message, reactions, from, comments} = this.props;
+    const {
+      id,
+      created_time,
+      message,
+      reactions,
+      from,
+      comments,
+      openReactionsModal
+    } = this.props;
 
     const linkifiedMessage = linkifyMessage(message);
 
     const commentReplies = comments &&
     (
       this.state.seeMore ?
-      comments.data.map((comment) => <CommentReplyCard key={comment.id} {...comment} />) :
-      <CommentReplyCard key={comments.data[0].id} {...comments.data[0]} />
-    )
+      comments.data.map((comment) =>
+        <CommentReplyCard
+          key={comment.id}
+          {...comment}
+          openReactionsModal={(id) => openReactionsModal(id)}
+        />
+      ) :
+      <CommentReplyCard
+        key={comments.data[0].id}
+        {...comments.data[0]}
+        openReactionsModal={(id) => openReactionsModal(id)}
+      />
+    );
+
+    const number_of_reactions = reactions ? reactions.data.length : 0;
+    const number_of_comments = comments ? comments.data.length : 0;
+
     return (
       <View style={{padding: COMMENT_PADDING}}>
         <RowView>
@@ -63,6 +85,12 @@ class CommentCard extends PureComponent {
             <Text>
               {linkifiedMessage}
             </Text>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <TouchableOpacity style={{paddingVertical: 5}} onPress={() => openReactionsModal(id)}>
+                <Text>{number_of_reactions} Likes</Text>
+              </TouchableOpacity>
+              <Text style={{paddingHorizontal: 5}}>{number_of_comments} Comment</Text>
+            </View>
           </CommentMessageView>
         </RowView>
         {commentReplies}
