@@ -11,6 +11,7 @@ import TabIcon from '../components/tabIcon';
 import ConfessionCard from '../components/confessionCard';
 import SendNotification from '../components/sendNotification';
 import ReportModal from '../components/reportModal';
+import ReactionsModal from '../components/reactionsModal';
 import colors from '../constants/colors';
 import { width } from '../constants/styles';
 import { fetchFb, fetchNext, awsPost } from '../utils';
@@ -47,7 +48,8 @@ export default class ConfessionsFeedScreen extends PureComponent {
 			modalVisible: false,
 			actionSheetSelectedId: '',
 			show_notification: false,
-			reportText: ''
+			reportText: '',
+			reactionsModalVisible: false
 		};
 	}
 
@@ -90,6 +92,7 @@ export default class ConfessionsFeedScreen extends PureComponent {
 	createConfessionCards = ({ item: confession }) => (
 		<ConfessionCard
 			{...confession}
+			openReactionsModal={() => this.setState({ reactionsModalVisible: true })}
 			isHidden={this.state.hiddenPosts.includes(confession.id)}
 			show_copied={() => this.setState({ show_notification: true, notificationMessage: "Confession Copied" })}
 			open_action_sheet={(id) => {
@@ -183,6 +186,7 @@ export default class ConfessionsFeedScreen extends PureComponent {
 			fetchStatus,
 			hiddenPosts,
 			modalVisible,
+			reactionsModalVisible,
 			confessionsList,
 			actionSheetSelectedId,
 			show_notification,
@@ -197,6 +201,10 @@ export default class ConfessionsFeedScreen extends PureComponent {
 
 		return (
 			<Layout headerTitle="Feed">
+				<ReactionsModal
+					modalVisible={reactionsModalVisible}
+					closeModal={() => this.setState({ reactionsModalVisible: false })}
+				/>
 				<ReportModal
 					modalVisible={modalVisible}
 					reportText={reportText}

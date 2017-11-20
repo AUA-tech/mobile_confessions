@@ -35,7 +35,8 @@ class ConfessionCard extends PureComponent {
       comments,
       open_action_sheet,
       show_copied,
-      isHidden
+      isHidden,
+      openReactionsModal
     } = this.props;
       // If image attachment exists, get it's ratio
     const image_height = attachments ? attachments.data[0].media.image.height : undefined;
@@ -99,7 +100,9 @@ class ConfessionCard extends PureComponent {
           }
           <RowView style={{padding: 10}}>
             <RowView>
-              <Text style={{paddingHorizontal: 5}}>{number_of_reactions} Likes</Text>
+              <TouchableOpacity style={{paddingHorizontal: 5}} onPress={() => openReactionsModal()}>
+                <Text>{number_of_reactions} Likes</Text>
+              </TouchableOpacity>
               <Text style={{paddingHorizontal: 5}}>{number_of_comments} Comment</Text>
             </RowView>
             <ActionView onPress={() => open_action_sheet(id)}>
