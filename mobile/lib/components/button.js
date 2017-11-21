@@ -4,13 +4,14 @@ import styled from 'styled-components/native';
 import colors from '../constants/colors';
 
 const Button = ({ onPress, title, disabled }) => (
-<CustomTouchableOpacity disabled={disabled} onPress={onPress}>
-      <ButtonWrapper
-        style={{ backgroundColor: disabled ? colors.placeholderColor : colors.sucessColor }}
-        disabled={disabled}>
-        <ButtonTitle>{ title.toUpperCase() }</ButtonTitle>
-      </ButtonWrapper>
-    </CustomTouchableOpacity>
+	<CustomTouchableOpacity disabled={disabled} onPress={onPress}>
+		<ButtonWrapper
+			style={{ backgroundColor: disabled ? colors.placeholderColor : colors.sucessColor }}
+			disabled={disabled}
+		>
+			<ButtonTitle>{ title.toUpperCase() }</ButtonTitle>
+		</ButtonWrapper>
+	</CustomTouchableOpacity>
 );
 
 const CustomTouchableOpacity = styled.TouchableOpacity`
