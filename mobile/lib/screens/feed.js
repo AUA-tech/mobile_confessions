@@ -47,7 +47,7 @@ export default class ConfessionsFeedScreen extends PureComponent {
 			showNotification: false,
 			reportText: '',
 			reactionsModalVisible: false,
-			reactionsArray: []
+			reactionsArray: [],
 		};
 	}
 
@@ -95,7 +95,7 @@ export default class ConfessionsFeedScreen extends PureComponent {
 			}
 			const reactionsArray = result.reactions ? result.reactions.data : [];
 			this.setState({ reactionsArray });
-		}
+		};
 		fetchFb(id, 'reactions', callback);
 	}
 
@@ -104,7 +104,7 @@ export default class ConfessionsFeedScreen extends PureComponent {
 			{...confession}
 			openReactionsModal={(id) => {
 				this.fetchPostReactions(id);
-				this.setState({ reactionsModalVisible: true })
+				this.setState({ reactionsModalVisible: true });
 			}}
 			isHidden={this.state.hiddenPosts.includes(confession.id)}
 			showCopied={() => this.setState({ showNotification: true, notificationMessage: 'Confession Copied' })}
@@ -164,7 +164,8 @@ export default class ConfessionsFeedScreen extends PureComponent {
 	async submitReport() {
 		const { reportText, actionSheetSelectedId, confessionsList } = this.state;
 		if (reportText.trim()) {
-			const actionSheetSelectedObj = confessionsList.filter(conf => conf.id === actionSheetSelectedId)[0];
+			const actionSheetSelectedObj =
+				confessionsList.filter(conf => conf.id === actionSheetSelectedId)[0];
 			const actionSheetSelectedMsg = actionSheetSelectedObj && actionSheetSelectedObj.message;
 
 			const feedback = `REPORT: ${reportText} Message: ${actionSheetSelectedMsg}`;

@@ -40,9 +40,9 @@ export default class NewConfessionScreen extends PureComponent {
 			const res = await fetchedRes.json();
 
 			if (res.message === 'Success') {
-				this.setState({ confession: '', showNotification: true, message: 'Confession Submitted' })
+				this.setState({ confession: '', showNotification: true, message: 'Confession Submitted' });
 			} else {
-				this.setState({ confession: '', showNotification: true, message: 'Oops, something wrong' })
+				this.setState({ confession: '', showNotification: true, message: 'Oops, something wrong' });
 			}
 		}
 	}
@@ -53,24 +53,24 @@ export default class NewConfessionScreen extends PureComponent {
 			<Layout headerTitle='Confess'>
 				<KeyboardDismisser activeOpacity={1} onPress={() => Keyboard.dismiss()}>
 					<SendNotification
-						showNotification={ this.state.showNotification }
-						done={ () => this.setState({showNotification: false}) }
+						showNotification={this.state.showNotification}
+						done={() => this.setState({ showNotification: false })}
 						message={this.state.message}
 					/>
 					<StyledTextInput
 						multiline
-						numberOfLines = {4}
+						numberOfLines={4}
 						onChangeText={this.onTextChange}
 						value={this.state.confession}
-						placeholder={'Confess yourself here'}
+						placeholder='Confess yourself here'
 						placeholderTextColor={colors.placeholderColor}
 					/>
 					<AttachmentContainer>
 						<AttachmentText
 							editable={false}
 							multiline
-							numberOfLines = {4}
-							placeholder={'This will be changed later'}
+							numberOfLines={4}
+							placeholder='This will be changed later'
 							placeholderTextColor={colors.placeholderColor}
 						/>
 						<AttachedFilesBox />

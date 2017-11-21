@@ -45,9 +45,9 @@ export default class NewConfessionScreen extends PureComponent {
 			const res = await fetchedRes.json();
 
 			if (res.message === 'Success') {
-				this.setState({ feedback: '', showNotification: true, message: 'Feedback Submitted' })
+				this.setState({ feedback: '', showNotification: true, message: 'Feedback Submitted' });
 			} else {
-				this.setState({ feedback: '', showNotification: true, message: 'Oops, something wrong' })
+				this.setState({ feedback: '', showNotification: true, message: 'Oops, something wrong' });
 			}
 		}
 	}

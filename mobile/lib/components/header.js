@@ -37,12 +37,12 @@ class Header extends PureComponent {
 	render() {
 		const { title } = this.props;
 		const { isConnected } = this.state;
-
+		const backgroundColor = isConnected ? colors.primaryColor : colors.warningColor;
 		return (
-			<CenteredView style={{ backgroundColor: isConnected ? colors.primaryColor : colors.warningColor }}>
+			<CenteredView style={{ backgroundColor }}>
 				<StatusBar
-					backgroundColor={isConnected ? colors.primaryColor : colors.warningColor}
-					barStyle="light-content"
+					backgroundColor={backgroundColor}
+					barStyle='light-content'
 				/>
 				<HeaderText>{title}</HeaderText>
 				{

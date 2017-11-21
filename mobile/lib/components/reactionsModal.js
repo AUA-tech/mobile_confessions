@@ -8,7 +8,6 @@ import colors from '../constants/colors';
 import { linkTo } from '../utils';
 
 export default class ReactionsModal extends PureComponent {
-
 	getEmoji = (reactionType) => {
 		switch (reactionType) {
 		case 'LOVE':

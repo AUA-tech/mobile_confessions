@@ -4,7 +4,7 @@ import { differenceBy } from 'lodash';
 import { GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 import linkify from 'linkify-it';
 
-import { accessToken } from './constants/token';
+import accessToken from './constants/token';
 
 const linkifyIt = linkify().set({ fuzzyLink: false });
 
@@ -35,7 +35,6 @@ export const fetchNext = async (pagingNext, confessionsList) => {
 };
 
 export const fetchFb = (id, type, callback) => {
-
 	const opts = {
 		parameters: {
 			access_token: {
@@ -58,7 +57,8 @@ export const fetchFb = (id, type, callback) => {
 		opts.parameters.fields.string = 'reactions.limit(1000){name,id,type,pic,link}';
 		break;
 	//	case 'comments':
-	//		opts.parameters.fields.string = 'comments{comments{reactions,message,created_time,from},message,reactions,created_time,from}';
+	//	opts.parameters.fields.string =
+	//	'comments{comments{reactions,message,created_time,from},message,reactions,created_time,from}';
 	//	break;
 	default:
 		console.error('No such fb fetch type');

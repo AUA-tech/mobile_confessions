@@ -20,7 +20,6 @@ const notificationStyle = {
 };
 
 export default class SendNotification extends PureComponent {
-
 	notificationOpacity = new Animated.Value(0);
 	notificationZindex = new Animated.Value(-500);
 	showNotificationF = () => {
@@ -50,7 +49,7 @@ export default class SendNotification extends PureComponent {
 			{
 				opacity: this.notificationOpacity,
 				zIndex: this.notificationZindex,
-			}
+			},
 		];
 		return (
 			<Animated.View style={withAnimationsStyle}>

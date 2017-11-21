@@ -12,7 +12,6 @@ import colors from '../constants/colors';
 import { linkifyMessage } from '../utils';
 
 class ConfessionCard extends PureComponent {
-
 	state = {
 		seeMore: false,
 	}
@@ -50,7 +49,11 @@ class ConfessionCard extends PureComponent {
 
 		const confessionNumberMatch = message.match(/#([0-9]+)\d/); // Match a regexp for extracting confession number
 		const confessionNumber = confessionNumberMatch ? confessionNumberMatch[0] : ''; // Match data is an array so we validate and take the first item if valid
-		const clearedMessage = confessionNumberMatch ? message.split(confessionNumber)[1] : message; // We also need to clear the message if the match is not null
+		// We also need to clear the message if the match is not null
+		const clearedMessage =
+			confessionNumberMatch ?
+				message.split(confessionNumber)[1] :
+				message;
 
 		const linkifiedMessage = linkifyMessage(clearedMessage);
 
@@ -69,7 +72,7 @@ class ConfessionCard extends PureComponent {
 					{...comments.data[0]}
 					openReactionsModal={postId => openReactionsModal(postId)}
 				/>
-		)
+		);
 		let content = null;
 		if (isHidden) {
 			content = (
@@ -79,15 +82,15 @@ class ConfessionCard extends PureComponent {
 							<NumberText>{confessionNumber}</NumberText>
 							{/* <DateText>{moment(created_time).format('MMM D, HH:mm')}</DateText> */}
 							<ActionView onPress={() => this.selectAndOpenActionSheet(id)}>
-								<Image
-									style={{ width: 15, height: 15, transform: [ { rotateZ: '180deg' } ], marginTop: 15 }} // this marginTop thing is a hacky way...
+								<ActionSheetButton
+									style={{ transform: [ { rotateZ: '180deg' } ], marginTop: 15 }} // this marginTop thing is a hacky way...
 									source={require('../assets/actionSheetButton.png')}
 								/>
 							</ActionView>
 						</RowView>
 					</TextContentView>
 				</CardView>
-			)
+			);
 		} else {
 			content = (
 				<CardView>
@@ -109,14 +112,13 @@ class ConfessionCard extends PureComponent {
 					}
 					<RowView style={{ padding: 10 }}>
 						<RowView>
-							<TouchableOpacity style={{ paddingHorizontal: 5 }} onPress={() => openReactionsModal(id)}>
+							<LikesButton onPress={() => openReactionsModal(id)}>
 								<Text style={{ fontFamily: 'Roboto' }}>{numberOfReactions} Likes</Text>
-							</TouchableOpacity>
+							</LikesButton>
 							<Text style={{ paddingHorizontal: 5, fontFamily: 'Roboto' }}>{numberOfComments} Comment</Text>
 						</RowView>
 						<ActionView onPress={() => this.selectAndOpenActionSheet(id)}>
-							<Image
-								style={{ width: 15, height: 15 }}
+							<ActionSheetButton
 								source={require('../assets/actionSheetButton.png')}
 							/>
 						</ActionView>
@@ -146,6 +148,15 @@ class ConfessionCard extends PureComponent {
 		return content;
 	}
 }
+
+const LikesButton = styled.TouchableOpacity`
+	padding-horizontal: 5;
+`;
+
+const ActionSheetButton = styled.Image`
+	width: 15;
+	height: 15;
+`;
 
 const NumberText = styled.Text`
   color: ${colors.headerColor};

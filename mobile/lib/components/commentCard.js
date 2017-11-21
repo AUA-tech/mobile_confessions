@@ -89,9 +89,9 @@ class CommentCard extends PureComponent {
 							{linkifiedMessage}
 						</Text>
 						<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-							<TouchableOpacity style={{ paddingVertical: 5 }} onPress={() => openReactionsModal(id)}>
+							<LikesButton onPress={() => openReactionsModal(id)}>
 								<Text style={{ fontFamily: 'Roboto' }}>{numberOfReactions} Likes</Text>
-							</TouchableOpacity>
+							</LikesButton>
 							<Text style={{ paddingHorizontal: 5, fontFamily: 'Roboto' }}>{numberOfComments} Comment</Text>
 						</View>
 					</CommentMessageView>
@@ -119,6 +119,10 @@ class CommentCard extends PureComponent {
 		);
 	}
 }
+
+const LikesButton = styled.TouchableOpacity`
+	padding-vertical: 5;
+`;
 
 const CommenterImage = styled.Image`
   width: ${COMMENTER_IMAGE};
