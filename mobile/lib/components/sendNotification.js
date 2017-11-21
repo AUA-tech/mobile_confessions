@@ -42,7 +42,7 @@ export default class SendNotification extends PureComponent {
 	}
 
 	render() {
-		if (this.props.show_notification) {
+		if (this.props.showNotification) {
 			this.showNotificationF();
 		}
 		const withAnimationsStyle = [

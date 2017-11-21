@@ -26,7 +26,7 @@ export default class NewConfessionScreen extends PureComponent {
 		super();
 		this.state = {
 			confession: '',
-			show_notification: false,
+			showNotification: false,
 			message: '',
 		};
 	}
@@ -40,9 +40,9 @@ export default class NewConfessionScreen extends PureComponent {
 			const res = await fetchedRes.json();
 
 			if (res.message === 'Success') {
-				this.setState({ confession: '', show_notification: true, message: 'Confession Submitted' })
+				this.setState({ confession: '', showNotification: true, message: 'Confession Submitted' })
 			} else {
-				this.setState({ confession: '', show_notification: true, message: 'Oops, something wrong' })
+				this.setState({ confession: '', showNotification: true, message: 'Oops, something wrong' })
 			}
 		}
 	}
@@ -53,8 +53,8 @@ export default class NewConfessionScreen extends PureComponent {
 			<Layout headerTitle='Confess'>
 				<KeyboardDismisser activeOpacity={1} onPress={() => Keyboard.dismiss()}>
 					<SendNotification
-						show_notification={ this.state.show_notification }
-						done={ () => this.setState({show_notification: false}) }
+						showNotification={ this.state.showNotification }
+						done={ () => this.setState({showNotification: false}) }
 						message={this.state.message}
 					/>
 					<StyledTextInput

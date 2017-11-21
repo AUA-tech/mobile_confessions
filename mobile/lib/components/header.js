@@ -6,7 +6,7 @@ import colors from '../constants/colors';
 
 class Header extends PureComponent {
 	state = {
-		is_connected: true,
+		isConnected: true,
 	}
 
 	componentDidMount() {
@@ -14,11 +14,11 @@ class Header extends PureComponent {
 			switch (reach.type) {
 			case 'none':
 			case 'unknown':
-				this.setState({ is_connected: false });
+				this.setState({ isConnected: false });
 				break;
 			case 'wifi':
 			case 'cellular':
-				this.setState({ is_connected: true });
+				this.setState({ isConnected: true });
 				break;
 			default:
 				break;
@@ -36,17 +36,17 @@ class Header extends PureComponent {
 
 	render() {
 		const { title } = this.props;
-		const { is_connected } = this.state;
+		const { isConnected } = this.state;
 
 		return (
-			<CenteredView style={{ backgroundColor: is_connected ? colors.primaryColor : colors.warningColor }}>
+			<CenteredView style={{ backgroundColor: isConnected ? colors.primaryColor : colors.warningColor }}>
 				<StatusBar
-					backgroundColor={is_connected ? colors.primaryColor : colors.warningColor}
+					backgroundColor={isConnected ? colors.primaryColor : colors.warningColor}
 					barStyle="light-content"
 				/>
 				<HeaderText>{title}</HeaderText>
 				{
-					is_connected ?
+					isConnected ?
 						null :
 						<View>
 							<NoInternetConnectionText>

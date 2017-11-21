@@ -24,8 +24,8 @@ class ConfessionCard extends PureComponent {
 	}
 
 	copyOnLongPress = () => {
-		const { show_copied, message } = this.props;
-		show_copied();
+		const { showCopied, message } = this.props;
+		showCopied();
 		Clipboard.setString(message);
 	}
 

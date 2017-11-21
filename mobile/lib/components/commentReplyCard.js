@@ -90,7 +90,7 @@ const CommenterReplyName = styled.Text`
 
 const CommentReplyMessageView = styled.View`
 	paddingLeft: 10;
-	width: ${width - REPLY_LEFT_PADDING - COMMENTER_REPLY_IMAGE - 2 * COMMENT_PADDING};
+	width: ${width - REPLY_LEFT_PADDING - COMMENTER_REPLY_IMAGE - (2 * COMMENT_PADDING)};
 `;
 
 const DateText = styled.Text`

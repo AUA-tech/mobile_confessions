@@ -9,9 +9,9 @@ const InfoCard = ({
 	name,
 	image,
 	description,
-	open_modal,
+	openModal,
 }) => (
-	<CardView onPress={() => open_modal(name)}>
+	<CardView onPress={() => openModal(name)}>
 		<RowView>
 			<AuthorImage
 				source={{ uri: image }}

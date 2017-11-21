@@ -44,7 +44,7 @@ export default class ConfessionsFeedScreen extends PureComponent {
 			hiddenPosts: [],
 			modalVisible: false,
 			actionSheetSelectedId: '',
-			show_notification: false,
+			showNotification: false,
 			reportText: '',
 			reactionsModalVisible: false,
 			reactionsArray: []
@@ -107,7 +107,7 @@ export default class ConfessionsFeedScreen extends PureComponent {
 				this.setState({ reactionsModalVisible: true })
 			}}
 			isHidden={this.state.hiddenPosts.includes(confession.id)}
-			show_copied={() => this.setState({ show_notification: true, notificationMessage: 'Confession Copied' })}
+			showCopied={() => this.setState({ showNotification: true, notificationMessage: 'Confession Copied' })}
 			selectPostId={postId => this.setState({ actionSheetSelectedId: postId })}
 			openActionSheet={() => this.ActionSheet.show()}
 		/>
@@ -174,14 +174,14 @@ export default class ConfessionsFeedScreen extends PureComponent {
 			if (res.message === 'Success') {
 				this.setState({
 					reportText: '',
-					show_notification: true,
+					showNotification: true,
 					notificationMessage: 'Report Submitted',
 					modalVisible: false,
 				});
 			} else {
 				this.setState({
 					reportText: '',
-					show_notification: true,
+					showNotification: true,
 					notificationMessage: 'Oops, something wrong',
 					modalVisible: false,
 				});
@@ -197,7 +197,7 @@ export default class ConfessionsFeedScreen extends PureComponent {
 			reactionsModalVisible,
 			confessionsList,
 			actionSheetSelectedId,
-			show_notification,
+			showNotification,
 			reportText,
 			notificationMessage,
 			reactionsArray,
@@ -223,8 +223,8 @@ export default class ConfessionsFeedScreen extends PureComponent {
 					submitReport={() => this.submitReport()}
 				/>
 				<SendNotification
-					show_notification={show_notification}
-					done={() => this.setState({ show_notification: false })}
+					showNotification={showNotification}
+					done={() => this.setState({ showNotification: false })}
 					message={notificationMessage}
 				/>
 				<FlatList

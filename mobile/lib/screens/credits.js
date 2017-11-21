@@ -28,10 +28,10 @@ export default class NewConfessionScreen extends PureComponent {
 		super();
 		this.state = {
 			feedback: '',
-			show_notification: false,
+			showNotification: false,
 			message: '',
 			modalVisible: false,
-			author_name: '',
+			authorName: '',
 		};
 	}
 
@@ -45,9 +45,9 @@ export default class NewConfessionScreen extends PureComponent {
 			const res = await fetchedRes.json();
 
 			if (res.message === 'Success') {
-				this.setState({ feedback: '', show_notification: true, message: 'Feedback Submitted' })
+				this.setState({ feedback: '', showNotification: true, message: 'Feedback Submitted' })
 			} else {
-				this.setState({ feedback: '', show_notification: true, message: 'Oops, something wrong' })
+				this.setState({ feedback: '', showNotification: true, message: 'Oops, something wrong' })
 			}
 		}
 	}
@@ -56,12 +56,12 @@ export default class NewConfessionScreen extends PureComponent {
 		const { feedback } = this.state;
 		const authorsCards = authors.map(author => (
 			<InfoCard
-				open_modal={name => this.setState({ modalVisible: true, author_name: name })}
+				openModal={name => this.setState({ modalVisible: true, authorName: name })}
 				{...author}
 				key={author.name}
 			/>
 		));
-		const filteredAuthor = authors.filter(a => a.name === this.state.author_name)[0];
+		const filteredAuthor = authors.filter(a => a.name === this.state.authorName)[0];
 		const selectedAuthor = filteredAuthor || {};
 		const authorLinks = !selectedAuthor ? null :
 			[ 'facebook', 'linkedin', 'github', 'behance' ].map((source) => {
@@ -93,7 +93,7 @@ export default class NewConfessionScreen extends PureComponent {
 							</AuthorModalView>
 						</RowView>
 						<AuthorModalFullDescriptionView>
-							<Text style={{ fontFamily: 'Roboto' }}>{selectedAuthor.full_description}</Text>
+							<Text style={{ fontFamily: 'Roboto' }}>{selectedAuthor.fullDescription}</Text>
 						</AuthorModalFullDescriptionView>
 						<RowView>
 							{authorLinks}
@@ -101,8 +101,8 @@ export default class NewConfessionScreen extends PureComponent {
 					</ModalView>
 				</Modal>
 				<SendNotification
-					show_notification={this.state.show_notification}
-					done={() => this.setState({ show_notification: false })}
+					showNotification={this.state.showNotification}
+					done={() => this.setState({ showNotification: false })}
 					message={this.state.message}
 				/>
 				<StyledTextInput
