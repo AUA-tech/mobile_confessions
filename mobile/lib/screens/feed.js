@@ -67,11 +67,18 @@ export default class ConfessionsFeedScreen extends PureComponent {
 		navigation.setParams({ refresh: false });
 	}
 
+	componentWillUpdate(nextProps) {
+		const { navigation } = nextProps;
+		const { state: { params } } = navigation;
+		if (params && params.refresh) {
+			this.flatListRef.scrollToIndex({ animated: false, index: 0 });
+		}
+	}
+
 	componentDidUpdate() {
 		const { navigation } = this.props;
 		const { state: { params } } = navigation;
 		if (params && params.refresh) {
-			this.flatListRef.scrollToIndex({ animated: true, index: 0 });
 			try {
 				this.generateGraphRequest();
 				navigation.setParams({ refresh: false });
