@@ -25,9 +25,9 @@ export default class ConfessionsFeedScreen extends PureComponent {
 		),
 		tabBarOnPress: ({ focused }, jumpToIndex) => {
 			if (focused) {
-				const paramsAction = NavigationActions.navigate({
-					routeName: 'Home',
+				const paramsAction = NavigationActions.setParams({
 					params: { refresh: true },
+					key: 'Home',
 				});
 				navigation.dispatch(paramsAction);
 			} else {
