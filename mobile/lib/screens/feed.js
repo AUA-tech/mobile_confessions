@@ -168,24 +168,18 @@ export default class ConfessionsFeedScreen extends PureComponent {
 				confessionsList.filter(conf => conf.id === actionSheetSelectedId)[0];
 			const actionSheetSelectedMsg = actionSheetSelectedObj && actionSheetSelectedObj.message;
 
+			this.setState({
+				reportText: '',
+				showNotification: true,
+				notificationMessage: 'Report Submitted',
+				modalVisible: false,
+			});
+
 			const feedback = `REPORT: ${reportText} Message: ${actionSheetSelectedMsg}`;
 			const fetchedRes = await awsPost('send_feedback', { feedback });
 			const res = await fetchedRes.json();
-
-			if (res.message === 'Success') {
-				this.setState({
-					reportText: '',
-					showNotification: true,
-					notificationMessage: 'Report Submitted',
-					modalVisible: false,
-				});
-			} else {
-				this.setState({
-					reportText: '',
-					showNotification: true,
-					notificationMessage: 'Oops, something wrong',
-					modalVisible: false,
-				});
+			if (res.message !== 'Success') {
+				Alert.alert('Oops, report was not submitted');
 			}
 		}
 	}

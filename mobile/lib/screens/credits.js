@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Keyboard, Text, TouchableOpacity } from 'react-native';
+import { Keyboard, Text, TouchableOpacity, Alert } from 'react-native';
 import styled from 'styled-components/native';
 import Modal from 'react-native-modal';
 
@@ -41,13 +41,11 @@ export default class NewConfessionScreen extends PureComponent {
 		const { feedback } = this.state;
 		Keyboard.dismiss();
 		if (feedback.trim() !== '') {
-			const fetchedRes = await awsPost('send_feedback', { feedback });
+			this.setState({ feedback: '', showNotification: true, message: 'Feedback Submitted' });
+			const fetchedRes = await awsPost('send_feedback', { feedback: `FEEDBACK: ${feedback}` });
 			const res = await fetchedRes.json();
-
-			if (res.message === 'Success') {
-				this.setState({ feedback: '', showNotification: true, message: 'Feedback Submitted' });
-			} else {
-				this.setState({ feedback: '', showNotification: true, message: 'Oops, something wrong' });
+			if (res.message !== 'Success') {
+				Alert.alert('Oops, feedback was not submitted');
 			}
 		}
 	}
