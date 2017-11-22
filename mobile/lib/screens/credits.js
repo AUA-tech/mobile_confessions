@@ -159,7 +159,7 @@ const AuthorImage = styled.Image`
 const LogoImage = styled.Image`
   height: 70;
   width: 70;
-  margin-right: 10;
+  margin-right: 20;
 `;
 
 const ModalView = styled.View`
