@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Keyboard } from 'react-native';
+import { Keyboard, Image } from 'react-native';
 import styled from 'styled-components/native';
 
 import Layout from '../components/layout';
@@ -8,7 +8,7 @@ import Button from '../components/button';
 import SendNotification from '../components/sendNotification';
 
 import colors from '../constants/colors';
-
+import { width, height } from '../constants/styles';
 import { awsPost } from '../utils';
 
 export default class NewConfessionScreen extends PureComponent {
@@ -48,6 +48,15 @@ export default class NewConfessionScreen extends PureComponent {
 	}
 
 	render() {
+		return (
+			<Layout headerTitle='Confess'>
+				<Image
+					source={require('../assets/confession_coming_soon.png')}
+					style={{ width, height: 0.9 * height }}
+					resizeMode='center'
+				/>
+			</Layout>
+		);
 		const { confession } = this.state;
 		return (
 			<Layout headerTitle='Confess'>
