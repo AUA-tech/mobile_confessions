@@ -83,9 +83,9 @@ const ReactionsScrollView = styled.ScrollView`
 `;
 
 const ReactionsTopBar = styled.View`
-  height: 8;
+  height: 6;
   width: 70;
-  border-radius: 4;
+  border-radius: 3;
   margin-bottom: 10;
   background-color: white;
 `;
