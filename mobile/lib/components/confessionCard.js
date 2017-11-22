@@ -159,7 +159,7 @@ class ConfessionCard extends PureComponent {
 const ShowCommentButton = styled.TouchableOpacity`
 	padding-horizontal: 10px;
 	padding-vertical: 5px;
-	background-color: #F4F4F4;
+	background-color: #EAEAEA;
 	border-radius: 20;
 `;
 
