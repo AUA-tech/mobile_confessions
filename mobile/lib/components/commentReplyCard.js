@@ -67,7 +67,7 @@ class CommentReplyCard extends PureComponent {
 						{linkifiedMessage}
 					</Text>
 					<TouchableOpacity style={{ paddingVertical: 5 }} onPress={() => openReactionsModal(id)}>
-						<Text style={{ fontFamily: 'Roboto' }}>{numberOfReactions} Likes</Text>
+						<Text style={{ fontFamily: 'Roboto', color: '#666666' }}>{numberOfReactions} Likes</Text>
 					</TouchableOpacity>
 				</CommentReplyMessageView>
 			</RowView>

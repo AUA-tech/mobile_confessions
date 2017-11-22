@@ -90,9 +90,9 @@ class CommentCard extends PureComponent {
 						</Text>
 						<View style={{ flexDirection: 'row', alignItems: 'center' }}>
 							<LikesButton onPress={() => openReactionsModal(id)}>
-								<Text style={{ fontFamily: 'Roboto' }}>{numberOfReactions} Likes</Text>
+								<Text style={{ fontFamily: 'Roboto', color: '#666666' }}>{numberOfReactions} Likes</Text>
 							</LikesButton>
-							<Text style={{ paddingHorizontal: 5, fontFamily: 'Roboto' }}>{numberOfComments} Comment</Text>
+							<Text style={{ paddingHorizontal: 5, fontFamily: 'Roboto', color: '#666666' }}>{numberOfComments} Comment</Text>
 						</View>
 					</CommentMessageView>
 				</RowView>
@@ -103,22 +103,43 @@ class CommentCard extends PureComponent {
           comments.data.length > 1 &&
 					(
 						this.state.seeMore ?
-							<View style={{ padding: COMMENT_PADDING, paddingLeft: REPLY_LEFT_PADDING }}>
-								<TouchableOpacity onPress={() => this.setState({ seeMore: false })}>
-									<Text style={{ fontFamily: 'Roboto' }}>See Less replies</Text>
-								</TouchableOpacity>
-							</View> :
-							<View style={{ padding: COMMENT_PADDING, paddingLeft: REPLY_LEFT_PADDING }}>
-								<TouchableOpacity onPress={() => this.setState({ seeMore: true })}>
-									<Text style={{ fontFamily: 'Roboto' }}>See More replies</Text>
-								</TouchableOpacity>
-							</View>
+							<ShowCommentView>
+								<ShowCommentButton onPress={() => this.setState({ seeMore: false })}>
+									<ShowCommentText>See less replies</ShowCommentText>
+								</ShowCommentButton>
+								<View />
+							</ShowCommentView> :
+							<ShowCommentView>
+								<ShowCommentButton onPress={() => this.setState({ seeMore: true })}>
+									<ShowCommentText>See more replies</ShowCommentText>
+								</ShowCommentButton>
+								<View />
+							</ShowCommentView>
 					)
 				}
 			</View>
 		);
 	}
 }
+
+const ShowCommentButton = styled.TouchableOpacity`
+	padding-horizontal: 10px;
+	padding-vertical: 5px;
+	background-color: #F4F4F4;
+	border-radius: 20;
+`;
+
+const ShowCommentView = styled.View`
+	padding: ${COMMENT_PADDING}px;
+	padding-left: ${REPLY_LEFT_PADDING}px;
+	flex-direction: row;
+	justify-content: space-between;
+`;
+
+const ShowCommentText = styled.Text`
+	font-family: Roboto;
+	color: #4C4C4D;
+`;
 
 const LikesButton = styled.TouchableOpacity`
 	padding-vertical: 5;

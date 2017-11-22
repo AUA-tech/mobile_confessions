@@ -40,7 +40,7 @@ export default class ConfessionsFeedScreen extends PureComponent {
 		super();
 		this.state = {
 			confessionsList: [],
-			fetchStatus: 1,
+			fetchStatus: 2,
 			hiddenPosts: [],
 			modalVisible: false,
 			actionSheetSelectedId: '',
@@ -114,7 +114,7 @@ export default class ConfessionsFeedScreen extends PureComponent {
 	);
 
 	generateGraphRequest = () => {
-		this.setState({ fetchStatus: 1 }); // loading
+		this.setState({ fetchStatus: 2 }); // loading
 		fetchFb('/auaindulgence/feed', 'posts', this.responseInfoCallback);
 	}
 
