@@ -18,7 +18,7 @@ export default class ReportModal extends PureComponent {
 			<Modal
 				style={{ alignItems: 'center', justifyContent: 'center' }}
 				isVisible={modalVisible}
-				avoidKeyboard
+				// avoidKeyboard
 				onBackdropPress={closeModal}
 			>
 				<ReportView>

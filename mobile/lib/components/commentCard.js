@@ -81,7 +81,7 @@ class CommentCard extends PureComponent {
 					<CommentMessageView>
 						<RowView>
 							<CommenterName onPress={() => linkTo(this.state.link)}>
-								{from.name}
+								{from && from.name}
 							</CommenterName>
 							<DateText>{moment(created_time).format('MMM D, HH:mm')}</DateText>
 						</RowView>
@@ -139,7 +139,7 @@ const CommenterName = styled.Text`
 
 const CommentMessageView = styled.View`
   paddingLeft: 10;
-  width: ${(width - COMMENTER_IMAGE - 2) * COMMENT_PADDING};
+  width: ${width - COMMENTER_IMAGE - (2 * COMMENT_PADDING)};
 `;
 
 const DateText = styled.Text`

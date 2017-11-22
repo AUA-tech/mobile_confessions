@@ -59,7 +59,7 @@ class CommentReplyCard extends PureComponent {
 				<CommentReplyMessageView>
 					<RowView>
 						<CommenterReplyName onPress={() => linkTo(this.state.link)}>
-							{from.name}
+							{from && from.name}
 						</CommenterReplyName>
 						<DateText>{moment(created_time).format('MMM D, HH:mm')}</DateText>
 					</RowView>
