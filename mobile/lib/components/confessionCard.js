@@ -123,26 +123,31 @@ class ConfessionCard extends PureComponent {
 							/>
 						</ActionView>
 					</RowView>
-					{commentsUi}
-					{/* This is ugly af, need to find better solution */}
 					{
-						commentsUi &&
-						comments.data.length > 1 &&
-						(
-							this.state.seeMore ?
-								<ShowCommentView>
-									<ShowCommentButton onPress={() => this.setState({ seeMore: false })}>
-										<ShowCommentText>See less comments</ShowCommentText>
-									</ShowCommentButton>
-									<View />
-								</ShowCommentView> :
-								<ShowCommentView>
-									<ShowCommentButton onPress={() => this.setState({ seeMore: true })}>
-										<ShowCommentText>See more comments</ShowCommentText>
-									</ShowCommentButton>
-									<View />
-								</ShowCommentView>
-						)
+						comments &&
+							<View style={{ backgroundColor: '#FAFAFA', paddingBottom: 5 }}>
+								{commentsUi}
+								{/* This is ugly af, need to find better solution */}
+								{
+									commentsUi &&
+									comments.data.length > 1 &&
+									(
+										this.state.seeMore ?
+											<ShowCommentView>
+												<ShowCommentButton onPress={() => this.setState({ seeMore: false })}>
+													<ShowCommentText>See less comments</ShowCommentText>
+												</ShowCommentButton>
+												<View />
+											</ShowCommentView> :
+											<ShowCommentView>
+												<ShowCommentButton onPress={() => this.setState({ seeMore: true })}>
+													<ShowCommentText>See more comments</ShowCommentText>
+												</ShowCommentButton>
+												<View />
+											</ShowCommentView>
+									)
+								}
+							</View>
 					}
 				</CardView>
 			);
@@ -205,7 +210,6 @@ const TextContentView = styled.View`
 const CardView = styled.View`
   background-color: white;
   margin-bottom: 5;
-  padding-bottom: 5;
 `;
 
 const ActionView = styled.TouchableOpacity`
