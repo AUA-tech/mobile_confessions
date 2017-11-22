@@ -53,7 +53,7 @@ export default class NewConfessionScreen extends PureComponent {
 				<Image
 					source={require('../assets/confession_coming_soon.png')}
 					style={{ width, height: 0.9 * height }}
-					resizeMode='center'
+					resizeMode='cover'
 				/>
 			</Layout>
 		);
