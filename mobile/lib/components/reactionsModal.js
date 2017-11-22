@@ -91,7 +91,7 @@ const ReactionsTopBar = styled.View`
 `;
 
 const ReactionsWrapper = styled.View`
-  height: 420;
+  height: 470;
   width: ${width};
   justify-content: center;
   align-items: center;
