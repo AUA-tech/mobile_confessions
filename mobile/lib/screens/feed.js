@@ -60,9 +60,25 @@ export default class ConfessionsFeedScreen extends PureComponent {
 	}
 
 	async componentDidMount() {
+		const { navigation } = this.props;
 		const hiddenPostsJson = await AsyncStorage.getItem('hiddenPosts');
 		const hiddenPosts = JSON.parse(hiddenPostsJson) || [];
 		this.setState({ hiddenPosts });
+		navigation.setParams({ refresh: false });
+	}
+
+	componentDidUpdate() {
+		const { navigation } = this.props;
+		const { state: { params } } = navigation;
+		if (params && params.refresh) {
+			this.flatListRef.scrollToIndex({ animated: true, index: 0 });
+			try {
+				this.generateGraphRequest();
+				navigation.setParams({ refresh: false });
+			} catch (error) {
+				console.log(error);
+			}
+		}
 	}
 
 	responseInfoCallback = (error, result) => {
@@ -225,13 +241,14 @@ export default class ConfessionsFeedScreen extends PureComponent {
 				<FlatList
 					key='scrollView'
 					data={confessionsList}
-					style={{ backgroundColor: colors.bgColor }}
-					renderItem={this.createConfessionCards}
-					keyExtractor={item => item.id}
-					refreshing={fetchStatus === 2}
-					onRefresh={() => this.generateGraphRequest()}
 					onEndReachedThreshold={0.2}
+					refreshing={fetchStatus === 2}
+					keyExtractor={item => item.id}
 					onEndReached={() => this.fetchMore()}
+					renderItem={this.createConfessionCards}
+					style={{ backgroundColor: colors.bgColor }}
+					onRefresh={() => this.generateGraphRequest()}
+					ref={ (flatListRef) => { this.flatListRef = flatListRef } }
 				/>
 				{ fetchStatus !== 1 ? null
 					: <ActivityIndicator />
