@@ -21,7 +21,7 @@ class ConfessionCard extends Component {
 			if ((!nextReactions && prevReactions) || (nextReactions && !prevReactions)) {
 				return true;
 			}
-			if (nextReactions) {
+			if (nextReactions && prevReactions) {
 				if (nextReactions.data.length !== prevReactions.data.length) {
 					return true;
 				}

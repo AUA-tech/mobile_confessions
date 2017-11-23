@@ -71,7 +71,7 @@ export default class ConfessionsFeedScreen extends PureComponent {
 		const { navigation } = nextProps;
 		const { state: { params } } = navigation;
 		if (params && params.refresh) {
-			this.flatListRef.scrollToIndex({ animated: false, index: 0 });
+			this.flatListRef.scrollToIndex({ animated: true, index: 0 });
 		}
 	}
 
@@ -102,8 +102,9 @@ export default class ConfessionsFeedScreen extends PureComponent {
 			const { data, paging } = result;
 			// const newPostsList = differenceBy(data, confessionsList, 'id');
 			const newList = data || confessionsList;
+			const newListFiltered = newList.filter(i => i.message);
 			// status 0 means nothing to load
-			this.setState({ confessionsList: newList, paging, fetchStatus: 0 }, () => {
+			this.setState({ confessionsList: newListFiltered, paging, fetchStatus: 0 }, () => {
 				const updatedCachedPosts = JSON.stringify(newList.slice(0, 25));
 				AsyncStorage.setItem('cachedPosts', updatedCachedPosts);
 			});

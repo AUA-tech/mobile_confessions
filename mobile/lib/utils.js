@@ -26,11 +26,12 @@ export const fetchNext = async (pagingNext, confessionsList) => {
 		const res = await promise.json();
 		const { data, paging } = res;
 		const newPostsList = differenceBy(data, confessionsList, 'id');
-		const newList = [ ...confessionsList, ...newPostsList ];
+		const newPostsListFiltered = newPostsList.filter(c => c.message);
+		const newList = [ ...confessionsList, ...newPostsListFiltered ];
 		return { newList, newPaging: paging };
 	} catch (e) {
 		console.warn(e);
-		return null;
+		return { newList: confessionsList, newPaging: pagingNext };
 	}
 };
 
