@@ -100,8 +100,8 @@ export default class ConfessionsFeedScreen extends PureComponent {
 		} else {
 			const { confessionsList } = this.state;
 			const { data, paging } = result;
-			const newPostsList = differenceBy(data, confessionsList, 'id');
-			const newList = [ ...newPostsList, ...confessionsList ];
+			// const newPostsList = differenceBy(data, confessionsList, 'id');
+			const newList = data || confessionsList;
 			// status 0 means nothing to load
 			this.setState({ confessionsList: newList, paging, fetchStatus: 0 }, () => {
 				const updatedCachedPosts = JSON.stringify(newList.slice(0, 25));
@@ -255,7 +255,7 @@ export default class ConfessionsFeedScreen extends PureComponent {
 					renderItem={this.createConfessionCards}
 					style={{ backgroundColor: colors.bgColor }}
 					onRefresh={() => this.generateGraphRequest()}
-					ref={ (flatListRef) => { this.flatListRef = flatListRef } }
+					ref={(flatListRef) => { this.flatListRef = flatListRef; }}
 				/>
 				{ fetchStatus !== 1 ? null
 					: <ActivityIndicator />

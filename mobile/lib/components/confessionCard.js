@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component, PureComponent } from 'react';
 import styled from 'styled-components/native';
 import { Text, Image, View, Clipboard, TouchableOpacity } from 'react-native';
 import moment from 'moment';
@@ -11,9 +11,61 @@ import {
 import colors from '../constants/colors';
 import { linkifyMessage } from '../utils';
 
-class ConfessionCard extends PureComponent {
+class ConfessionCard extends Component {
 	state = {
 		seeMore: false,
+	}
+
+	shouldComponentUpdate(nextProps, nextState) {
+		const checkReactions = (nextReactions, prevReactions) => {
+			if ((!nextReactions && prevReactions) || (nextReactions && !prevReactions)) {
+				return true;
+			}
+			if (nextReactions) {
+				if (nextReactions.data.length !== prevReactions.data.length) {
+					return true;
+				}
+			}
+			return false;
+		};
+		const checkComments = (nextComments, prevComments) => {
+			if ((!nextComments && prevComments) || (nextComments && !prevComments)) {
+				return true;
+			}
+			if (nextComments && prevComments) {
+				if (nextComments.data.length !== prevComments.data.length) {
+					return true;
+				}
+
+				const needToUpdate = nextComments.data.some((nextComment, i) => {
+					if (checkReactions(nextComment.reactions, prevComments.data[i].reactions)) {
+						return true;
+					}
+					if (checkComments(nextComment.comments, prevComments.data[i].comments)) {
+						return true;
+					}
+					return false;
+				});
+				return needToUpdate;
+			}
+			return false;
+		};
+		if (nextProps.isHidden !== this.props.isHidden) {
+			return true;
+		}
+		if (nextState.seeMore !== this.state.seeMore) {
+			return true;
+		}
+		if (nextProps.message !== this.props.message) {
+			return true;
+		}
+		if (checkReactions(nextProps.reactions, this.props.reactions)) {
+			return true;
+		}
+		if (checkComments(nextProps.comments, this.props.comments)) {
+			return true;
+		}
+		return false;
 	}
 
 	selectAndOpenActionSheet = (id) => {
