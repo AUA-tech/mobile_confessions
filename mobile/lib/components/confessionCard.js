@@ -99,7 +99,7 @@ class ConfessionCard extends Component {
 		const numberOfReactions = reactions ? reactions.data.length : 0;
 		const numberOfComments = comments ? comments.data.length : 0;
 
-		const confessionNumberMatch = message.match(/#([0-9]+)\d/); // Match a regexp for extracting confession number
+		const confessionNumberMatch = message && message.match(/#([0-9]+)\d/); // Match a regexp for extracting confession number
 		const confessionNumber = confessionNumberMatch ? confessionNumberMatch[0] : ''; // Match data is an array so we validate and take the first item if valid
 		// We also need to clear the message if the match is not null
 		const clearedMessage =
