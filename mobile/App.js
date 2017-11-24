@@ -142,7 +142,6 @@ MyApp.prototype.componentDidMount = () => {
 		}
 	});
 	AsyncStorage.getItem('cachedPosts', (err, res) => {
-		console.warn(res);
 		if (err) {
 			console.warn('AsyncStorage error', err);
 			return;

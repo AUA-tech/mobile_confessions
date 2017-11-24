@@ -92,7 +92,6 @@ class ConfessionCard extends Component {
 			isHidden,
 			openReactionsModal,
 		} = this.props;
-		console.log(id);
 		// If image attachment exists, get it's ratio
 		const imageHeight = attachments ? attachments.data[0].media.image.height : undefined;
 		const imageWidth = attachments ? attachments.data[0].media.image.width : undefined;
