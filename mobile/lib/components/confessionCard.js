@@ -1,6 +1,6 @@
-import React, { Component, PureComponent } from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components/native';
-import { Text, Image, View, Clipboard, TouchableOpacity } from 'react-native';
+import { Text, Image, View, Clipboard } from 'react-native';
 import moment from 'moment';
 
 import CommentCard from './commentCard';
@@ -92,6 +92,7 @@ class ConfessionCard extends Component {
 			isHidden,
 			openReactionsModal,
 		} = this.props;
+		console.log(id);
 		// If image attachment exists, get it's ratio
 		const imageHeight = attachments ? attachments.data[0].media.image.height : undefined;
 		const imageWidth = attachments ? attachments.data[0].media.image.width : undefined;

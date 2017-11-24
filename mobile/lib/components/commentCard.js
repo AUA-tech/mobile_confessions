@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import styled from 'styled-components/native';
-import { Text, View, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableWithoutFeedback } from 'react-native';
 import moment from 'moment';
 
 import CommentReplyCard from './commentReplyCard';
@@ -11,30 +11,19 @@ import {
 	COMMENTER_IMAGE,
 	REPLY_LEFT_PADDING,
 } from '../constants/styles';
-import { fetchFb, linkTo, linkifyMessage } from '../utils';
+import { linkTo, linkifyMessage } from '../utils';
 
 class CommentCard extends PureComponent {
-	state = {
-		avatar: 'placeholder',
-		link: '',
-		seeMore: false,
-	}
-
-	async componentWillMount() {
+	constructor(props) {
+		super(props);
 		const { from } = this.props;
-		if (from) {
-			fetchFb(from.id, 'user', this.responseInfoCallback);
-		}
-	}
-
-	responseInfoCallback = (error, result) => {
-		if (error) {
-			console.warn(error);
-			return;
-		}
-		if (result && result.picture && result.picture.data) {
-			this.setState({ avatar: result.picture.data.url, link: result.link });
-		}
+		const pic = from && from.picture && from.picture.data && from.picture.data.url;
+		const link = from && from.link;
+		this.state = {
+			avatar: pic || 'placeholder',
+			link: link || '',
+			seeMore: false,
+		};
 	}
 
 	render() {

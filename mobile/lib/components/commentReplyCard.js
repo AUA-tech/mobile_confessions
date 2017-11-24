@@ -10,29 +10,18 @@ import {
 	REPLY_LEFT_PADDING,
 } from '../constants/styles';
 import colors from '../constants/colors';
-import { fetchFb, linkTo, linkifyMessage } from '../utils';
+import { linkTo, linkifyMessage } from '../utils';
 
 class CommentReplyCard extends PureComponent {
-	state = {
-		avatar: 'placeholder',
-		link: '',
-	}
-
-	async componentWillMount() {
+	constructor(props) {
+		super(props);
 		const { from } = this.props;
-		if (from) {
-			fetchFb(from.id, 'user', this.responseInfoCallback);
-		}
-	}
-
-	responseInfoCallback = (error, result) => {
-		if (error) {
-			console.warn(error);
-			return;
-		}
-		if (result && result.picture && result.picture.data) {
-			this.setState({ avatar: result.picture.data.url, link: result.link });
-		}
+		const pic = from && from.picture && from.picture.data && from.picture.data.url;
+		const link = from && from.link;
+		this.state = {
+			avatar: pic || 'placeholder',
+			link: link || '',
+		};
 	}
 
 	render() {
