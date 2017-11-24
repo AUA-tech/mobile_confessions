@@ -37,6 +37,7 @@ export const fetchNext = async (pagingNext, confessionsList) => {
 
 export const fetchFb = (id, type, callback) => {
 	const opts = {
+		version: 'v2.10',
 		parameters: {
 			access_token: {
 				string: accessToken,
