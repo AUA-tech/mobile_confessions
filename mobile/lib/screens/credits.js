@@ -143,8 +143,9 @@ const AuthorModalDescription = styled.Text`
 `;
 
 const AuthorModalFullDescriptionView = styled.View`
-  height: ${width / 3};
-  padding-vertical: 10;
+	height: ${width / 3};
+	padding-top: 20;
+	padding-bottom: 10;
 `;
 
 const RowView = styled.View`
