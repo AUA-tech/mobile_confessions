@@ -3,7 +3,7 @@ const authors = [
 		name: 'Admin',
 		image: 'placeholder',
 		description: 'Official, cute and mysterious admin of AUA Confessions',
-		fullDescription: '',
+		fullDescription: 'Cutie pie',
 	},
 	{
 		name: 'Edgar Khanzadian',
@@ -39,7 +39,7 @@ const authors = [
 		name: 'Aaron Sarkissian',
 		image: 'aarons',
 		description: 'Back-end Developer',
-		fullDescription: '',
+		fullDescription: 'Code is my favorite part of staying alive;\nAs I\'m CS senior at AUA.',
 		facebook: 'https://facebook.com/aaronsarkissian',
 		linkedin: '',
 		github: 'https://github.com/aaronsarkissian',
