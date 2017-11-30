@@ -19,7 +19,7 @@ const authors = [
 		name: 'Robert Gevorgyan',
 		image: 'robertg',
 		description: 'Developer',
-		fullDescription: '',
+		fullDescription: 'Web/Mobile Developer. Programming from very young age. Basically a geek. Lover of comics, videogames fantasy etc.',
 		facebook: 'https://facebook.com/robert1999.g',
 		linkedin: 'https://linkedin.com/in/rga15071999/',
 		github: 'https://github.com/robgev',
