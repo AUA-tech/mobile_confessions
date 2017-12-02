@@ -143,8 +143,10 @@ export default class ConfessionsFeedScreen extends PureComponent {
 	fetchMore = async () => {
 		const { paging, confessionsList } = this.state;
 		this.setState({ fetchStatus: 1 }); // loading
-		const { newList, newPaging } = await fetchNext(paging.next, confessionsList);
-		this.setState({ confessionsList: newList, paging: newPaging, fetchStatus: 0 });
+		if (paging) {
+			const { newList, newPaging } = await fetchNext(paging.next, confessionsList);
+			this.setState({ confessionsList: newList, paging: newPaging, fetchStatus: 0 });
+		}
 	}
 
 	handleActionSheet(index) {
