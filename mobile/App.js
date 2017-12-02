@@ -2,6 +2,7 @@ import { Platform, AsyncStorage } from 'react-native';
 import { TabNavigator } from 'react-navigation';
 import SplashScreen from 'react-native-splash-screen';
 import FCM, { FCMEvent, RemoteNotificationResult, WillPresentNotificationResult, NotificationType } from 'react-native-fcm';
+import codePush from "react-native-code-push";
 
 import colors from './lib/constants/colors';
 import ConfessionsFeedScreen from './lib/screens/feed';
@@ -146,4 +147,4 @@ MyApp.prototype.componentDidMount = () => {
 	});
 };
 
-export default MyApp;
+export default codePush(MyApp);
