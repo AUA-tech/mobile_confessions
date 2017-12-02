@@ -51,7 +51,6 @@ FCM.on(FCMEvent.Notification, async (notif) => {
 	}
 });
 FCM.on(FCMEvent.RefreshToken, (token) => {
-	console.log(token);
 	// fcm token may not be available on first load, catch it here
 });
 
@@ -105,17 +104,15 @@ MyApp.prototype.componentWillUnmount = () => {
 	this.notificationListener.remove();
 };
 MyApp.prototype.componentDidMount = () => {
-	FCM.requestPermissions().then(() => console.log('granted')).catch(() => console.log('notification permission rejected'));
+	FCM.requestPermissions().then(() => {}).catch(() => console.log('notification permission rejected'));
 
 	FCM.subscribeToTopic('/topics/confessions');
 
 	FCM.getFCMToken().then((token) => {
-		console.log(token);
 		// store fcm token in your server
 	});
 
 	this.notificationListener = FCM.on(FCMEvent.Notification, async (notif) => {
-		console.log(notif);
 		// optional, do some component related stuff
 	});
 
@@ -128,13 +125,11 @@ MyApp.prototype.componentDidMount = () => {
 	// initial notification will be triggered all the time
 	// even when open app by icon so send some action identifier when you send notification
 	FCM.getInitialNotification().then((notif) => {
-		console.log(notif);
 	});
 
 	SplashScreen.hide();
 	AsyncStorage.getItem('hided_posts', (err, res) => {
 		if (err) {
-			console.warn('AsyncStorage error', err);
 			return;
 		}
 		if (res === null) {
@@ -143,7 +138,6 @@ MyApp.prototype.componentDidMount = () => {
 	});
 	AsyncStorage.getItem('cachedPosts', (err, res) => {
 		if (err) {
-			console.warn('AsyncStorage error', err);
 			return;
 		}
 		if (res === null) {

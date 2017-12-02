@@ -95,7 +95,6 @@ export default class ConfessionsFeedScreen extends PureComponent {
 					const cachedPosts = JSON.parse(cachedPostsJson) || [];
 					this.setState({ fetchStatus: 0, confessionsList: cachedPosts });
 				});
-			console.log('Error fetching data: ', error);
 			// May later change to 4, which will mean error: not needed yet
 		} else {
 			const { confessionsList } = this.state;
@@ -114,7 +113,6 @@ export default class ConfessionsFeedScreen extends PureComponent {
 	fetchPostReactions = (id) => {
 		const callback = (error, result) => {
 			if (error) {
-				console.warn(error);
 				return;
 			}
 			const reactionsArray = result.reactions ? result.reactions.data : [];
@@ -155,7 +153,6 @@ export default class ConfessionsFeedScreen extends PureComponent {
 		const alertMessage = isHidden ? 'Unhide this post?' : 'Hide this post?';
 		switch (index) {
 		case 0:
-			console.warn('Close ActionSheet');
 			break;
 		case 1:
 			Alert.alert(alertMessage, '', [

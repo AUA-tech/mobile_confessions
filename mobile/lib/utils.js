@@ -30,7 +30,6 @@ export const fetchNext = async (pagingNext, confessionsList) => {
 		const newList = [ ...confessionsList, ...newPostsListFiltered ];
 		return { newList, newPaging: paging };
 	} catch (e) {
-		console.warn(e);
 		return { newList: confessionsList, newPaging: pagingNext };
 	}
 };
@@ -63,7 +62,6 @@ export const fetchFb = (id, type, callback) => {
 	//	'comments{comments{reactions,message,created_time,from},message,reactions,created_time,from}';
 	//	break;
 	default:
-		console.error('No such fb fetch type');
 		break;
 	}
 
